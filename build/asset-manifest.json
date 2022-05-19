@@ -1,0 +1,39 @@
+{
+  "files": {
+    "main.css": "/fifascout/static/css/main.71c31bcb.chunk.css",
+    "main.js": "/fifascout/static/js/main.eb4fb5ec.chunk.js",
+    "main.js.map": "/fifascout/static/js/main.eb4fb5ec.chunk.js.map",
+    "runtime-main.js": "/fifascout/static/js/runtime-main.fae14f72.js",
+    "runtime-main.js.map": "/fifascout/static/js/runtime-main.fae14f72.js.map",
+    "static/css/2.e995eac1.chunk.css": "/fifascout/static/css/2.e995eac1.chunk.css",
+    "static/js/2.0ecd71db.chunk.js": "/fifascout/static/js/2.0ecd71db.chunk.js",
+    "static/js/2.0ecd71db.chunk.js.map": "/fifascout/static/js/2.0ecd71db.chunk.js.map",
+    "static/js/3.2b5d6e75.chunk.js": "/fifascout/static/js/3.2b5d6e75.chunk.js",
+    "static/js/3.2b5d6e75.chunk.js.map": "/fifascout/static/js/3.2b5d6e75.chunk.js.map",
+    "index.html": "/fifascout/index.html",
+    "static/css/2.e995eac1.chunk.css.map": "/fifascout/static/css/2.e995eac1.chunk.css.map",
+    "static/css/main.71c31bcb.chunk.css.map": "/fifascout/static/css/main.71c31bcb.chunk.css.map",
+    "static/js/2.0ecd71db.chunk.js.LICENSE.txt": "/fifascout/static/js/2.0ecd71db.chunk.js.LICENSE.txt",
+    "static/media/aguero.2c15cfec.png": "/fifascout/static/media/aguero.2c15cfec.png",
+    "static/media/argon-react.png": "/fifascout/static/media/argon-react.128d71d3.png",
+    "static/media/bale.8066b314.png": "/fifascout/static/media/bale.8066b314.png",
+    "static/media/burak.b129adb0.jpeg": "/fifascout/static/media/burak.b129adb0.jpeg",
+    "static/media/caglar.25cda950.jpeg": "/fifascout/static/media/caglar.25cda950.jpeg",
+    "static/media/all.min.css": "/fifascout/static/media/fa-solid-900.afbdcbcc.woff",
+    "static/media/fifa-logo.e54eecd4.svg": "/fifascout/static/media/fifa-logo.e54eecd4.svg",
+    "static/media/hakan.2dc0db99.jpeg": "/fifascout/static/media/hakan.2dc0db99.jpeg",
+    "static/media/haland.40584ac3.jpeg": "/fifascout/static/media/haland.40584ac3.jpeg",
+    "static/media/lukaku.8ce65fe8.jpeg": "/fifascout/static/media/lukaku.8ce65fe8.jpeg",
+    "static/media/mane.491e0ba3.png": "/fifascout/static/media/mane.491e0ba3.png",
+    "static/media/mesut.dcef69a4.png": "/fifascout/static/media/mesut.dcef69a4.png",
+    "static/media/nucleo.css": "/fifascout/static/media/nucleo-icons.d6a66724.ttf",
+    "static/media/vs.da7ee415.jpg": "/fifascout/static/media/vs.da7ee415.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fae14f72.js",
+    "static/css/2.e995eac1.chunk.css",
+    "static/js/2.0ecd71db.chunk.js",
+    "static/css/main.71c31bcb.chunk.css",
+    "static/js/main.eb4fb5ec.chunk.js"
+  ]
+}
