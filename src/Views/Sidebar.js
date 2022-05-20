@@ -4,7 +4,7 @@ import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
 import pic from "../assets/img/fifa-logo.svg";
-
+import { ethers } from "ethers";
 // reactstrap components
 import {
   Button,
@@ -37,7 +37,14 @@ import {
 } from "reactstrap";
 
 var ps;
+var provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+// Prompt user for account connections
 
+var signer;
+async function login(){
+  await provider.send("eth_requestAccounts", []);
+  signer = provider.getSigner();
+}
 class Sidebar extends React.Component {
   state = {
     collapseOpen: false,
@@ -191,17 +198,14 @@ class Sidebar extends React.Component {
             {/* Heading */}
 
             {/* Navigation */}
-            <Nav className="mb-md-3" navbar>
-              <NavItem>
-                <NavLink href="https://berkeozer.github.io/fifascout/">
-                  
-                  <div style={{ color: "#fb6340" }}>
+            <Button onClick={()=>{
+              login();
+            }}>
+            <div style={{ color: "#fb6340" }}>
                     <i className="ni ni-spaceship" />
                     Connect Wallet
                   </div>
-                </NavLink>
-              </NavItem>
-            </Nav>
+            </Button>
           </Collapse>
       </Navbar>
       </div>
