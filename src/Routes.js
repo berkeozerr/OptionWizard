@@ -1,6 +1,6 @@
 import CreateOption from "./Views/CreateOption";
 import ListOptions  from "./Views/ListOptions";
-
+import MyOptions from "./Views/MyOptions"
 var routes = [
   
 
@@ -24,10 +24,10 @@ var routes = [
     children: [],
   },
   {
-    path: "/createoption",
+    path: "/myOptions",
     name: "My Options",
     icon: "ni ni-key-25 text-info",
-    component: CreateOption,
+    component: MyOptions,
     layout: "/admin",
     visible: true,
     children: [],

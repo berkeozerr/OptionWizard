@@ -3,8 +3,12 @@ import "./App.css";
 
 import { Route, Redirect } from "react-router-dom";
 import Admin from "./Views/Admin";
+import { ReactSession } from 'react-client-session';
+
+ReactSession.setStoreType("localStorage");
+ReactSession.set("userAddress", "Not logged in");
+
 function App() {
-  
   return (
     <>
     <Route path="/admin" render={(props) => <Admin {...props} />} />

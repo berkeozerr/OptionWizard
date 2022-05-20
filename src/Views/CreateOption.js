@@ -45,10 +45,10 @@ const customStyles = {
 
 
 const itemMain = {
-  hidden: { opacity: 0, y: 200 },
+  hidden: { opacity: 0, y: 400 },
   show: {
     opacity: 1,
-    y: 0,
+    y: 200,
     transition: {
       ease: [0.6, 0.01, -0.05, 0.95],
       duration: 1.6,
@@ -140,12 +140,11 @@ class CreateOption extends Component {
     
 
       
-        <Card className="mx-auto py-7" style= {{background:"transparent",width: "40%" ,height: "50%",float:"center"}}>
+        <Card className="m-auto py-2" style= {{width: "40%" ,height: "30%",float:"center"}}>
   
         
-        <Card >
-      
           <CardHeader style = {{border:"none"}}>
+            
           <div className="switch" data-isOn={this.state.userFriendly} onClick={ () => this.setState({userFriendly:false})} style ={{float:"right"}}>
       <motion.div className="handle" layout transition={spring} />
     </div>
@@ -305,7 +304,6 @@ class CreateOption extends Component {
             </Form>
           </CardBody>
         </Card>
-        </Card>
         </motion.div>
         );
     }
@@ -315,14 +313,15 @@ class CreateOption extends Component {
         <motion.div variants={itemMain} initial="hidden" animate="show">
 
       
-        <Card className="mx-auto py-7" style= {{background:"transparent",width: "40%" ,height: "50%",float:"center"}}>
+        <Card className="m-auto py-2" style= {{width: "40%" ,height: "30%",float:"center"}}>
   
         
-        <Card style ={{float:"right"}}>
+        
       
-          <CardHeader  className ="bg-dark" style = {{border:"none"}}>
+          <CardHeader style = {{border:"none"}}>
           <div className="switch" data-isOn={this.state.userFriendly} onClick={ () => this.setState({userFriendly:true})} style ={{float:"right"}}>
       <motion.div className="handle" layout transition={spring} />
+      
     </div>
           </CardHeader>
           <CardBody className="mx-5 ">
@@ -439,7 +438,6 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
               </div>
             </Form>
           </CardBody>
-        </Card>
         </Card></motion.div>
         );
     }

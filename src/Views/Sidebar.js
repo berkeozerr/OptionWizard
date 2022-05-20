@@ -3,8 +3,12 @@ import React from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
-import pic from "../assets/img/fifa-logo.svg";
+import pic from "../assets/img/wizard_hat.svg";
 import { ethers } from "ethers";
+import { ReactSession }  from 'react-client-session';
+
+
+
 // reactstrap components
 import {
   Button,
@@ -49,7 +53,7 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.activeRoute.bind(this);
-    this.state = {walletConnecting: new String("Connect Wallet")};
+    this.state = {walletConnecting: new String(" Connect Wallet")};
   }
   
   // verifies if routeName is the one active (in browser input)
@@ -124,7 +128,9 @@ class Sidebar extends React.Component {
   async login(){
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
-    this.setState({walletConnecting:"Connected"});
+    ReactSession.set("userAddress", await signer.getAddress());
+    this.setState({walletConnecting:" Connected"});
+    
   }
   render() {
     
@@ -206,9 +212,9 @@ class Sidebar extends React.Component {
             <Button onClick={()=>{
               this.login();
             }}>
-            <div style={{ color: "#fb6340" }}>
-                    <i className="ni ni-spaceship" />
-                    {this.state.walletConnecting}
+            <div style={{ color: "#8140fb" }}>
+                    <i className="ni ni-single-02" />
+                     {this.state.walletConnecting}
                   </div>
             </Button>
           </Collapse>
