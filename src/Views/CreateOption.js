@@ -23,8 +23,8 @@ import Select,{ components } from 'react-select'
 import pic from '../assets/img/brand/argon-react.png'
 import { motion } from "framer-motion"
 import { Link, NavLink, withRouter } from "react-router-dom";
-import { useState } from "react";
-
+import {useState,useEffect} from "react";
+import Loader from "./Loader";
 const typeOptions = [
   { value: 'chocolate', label: 'Day' },
   { value: 'strawberry', label: 'Week' },
@@ -44,7 +44,25 @@ const customStyles = {
 };
 
 
-
+const itemMain = {
+  hidden: { opacity: 0, y: 200 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      ease: [0.6, 0.01, -0.05, 0.95],
+      duration: 1.6,
+    },
+    exit: {
+    opacity: 0,
+    y: -200,
+    transition: {
+      ease: "easeInOut",
+      duration: 0.8,
+    },
+  },
+  },
+};
 
 
 class CreateOption extends Component {
@@ -52,7 +70,7 @@ class CreateOption extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {userFriendly: new Boolean()};
+    this.state = {userFriendly: new Boolean(),loading: new Boolean(true)};
 
   }
   handleSubmit = (e) => {
@@ -72,6 +90,9 @@ class CreateOption extends Component {
       { value: "Germany", label: "ETH", icon: '../assets/img/brand/argon-react.png' }
     ];
 
+    var setLoading = (x) => {
+      this.setState({loading: x})
+    }
     const { Option } = components;
     const IconOption = props => (
       <Option {...props}>
@@ -105,9 +126,16 @@ class CreateOption extends Component {
       stiffness: 700,
       damping: 30
     };
+    if(this.state.loading == true){
+      return (
+        <Loader setLoading={setLoading} />
+      )
+    }
+    else{
     if (this.state.userFriendly == true) 
     {
       return (
+        <motion.div variants={itemMain} initial="hidden" animate="show">
 
     
 
@@ -278,12 +306,13 @@ class CreateOption extends Component {
           </CardBody>
         </Card>
         </Card>
+        </motion.div>
         );
     }
     else {
       return (
 
-    
+        <motion.div variants={itemMain} initial="hidden" animate="show">
 
       
         <Card className="mx-auto py-7" style= {{background:"transparent",width: "40%" ,height: "50%",float:"center"}}>
@@ -411,10 +440,10 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
             </Form>
           </CardBody>
         </Card>
-        </Card>
+        </Card></motion.div>
         );
     }
-    
+  }
      
       
 
