@@ -39,20 +39,19 @@ import {
 var ps;
 var provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 // Prompt user for account connections
-
 var signer;
-async function login(){
-  await provider.send("eth_requestAccounts", []);
-  signer = provider.getSigner();
-}
+
 class Sidebar extends React.Component {
+  
   state = {
     collapseOpen: false,
   };
   constructor(props) {
     super(props);
     this.activeRoute.bind(this);
+    this.state = {walletConnecting: new String("Connect Wallet")};
   }
+  
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -122,7 +121,13 @@ class Sidebar extends React.Component {
       }
     });
   }
+  async login(){
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    this.setState({walletConnecting:"Connected"});
+  }
   render() {
+    
     const { bgColor, routes, logo } = this.props;
     let navbarBrandProps;
     if (logo && logo.innerLink) {
@@ -199,11 +204,11 @@ class Sidebar extends React.Component {
 
             {/* Navigation */}
             <Button onClick={()=>{
-              login();
+              this.login();
             }}>
             <div style={{ color: "#fb6340" }}>
                     <i className="ni ni-spaceship" />
-                    Connect Wallet
+                    {this.state.walletConnecting}
                   </div>
             </Button>
           </Collapse>
