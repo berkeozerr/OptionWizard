@@ -48,14 +48,14 @@ const itemMain = {
   hidden: { opacity: 0, y: 400 },
   show: {
     opacity: 1,
-    y: 200,
+    y: 100,
     transition: {
       ease: [0.6, 0.01, -0.05, 0.95],
       duration: 1.6,
     },
     exit: {
     opacity: 0,
-    y: -200,
+    y: -100,
     transition: {
       ease: "easeInOut",
       duration: 0.8,
@@ -140,16 +140,17 @@ class CreateOption extends Component {
     
 
       
-        <Card className="m-auto py-2" style= {{width: "40%" ,height: "30%",float:"center"}}>
+        <Card className="m-auto py-2" style= {{width: "40%" ,height: "40%",float:"center", background:"#282c34"}}>
   
         
-          <CardHeader style = {{border:"none"}}>
-            
-          <div className="switch" data-isOn={this.state.userFriendly} onClick={ () => this.setState({userFriendly:false})} style ={{float:"right"}}>
+          <CardHeader style = {{border:"none",background:"#282c34"}}>
+            <Row>
+          <div className="switch ml-5" data-isOn={this.state.userFriendly} onClick={ () => this.setState({userFriendly:false})} style ={{float:"right"}}>
       <motion.div className="handle" layout transition={spring} />
-    </div>
+    </div><h1 class="ml-auto mr-5" style={{color:"white"}}>Proffessional</h1></Row>
+          
           </CardHeader>
-          <CardBody className="px-lg-5 ">
+          <CardBody style={{background:"#282c34"}} className="px-lg-5 ">
             <Form role="form">
              
               <Row className="mb-3">
@@ -297,7 +298,7 @@ class CreateOption extends Component {
              
              
               <div className="text-center">
-                <Button color="primary" type="button" onClick={() => this.setState({userFriendly:false})}>
+                <Button style={{background:"#6a04c9", color:"white", border:"none"}} type="button" onClick={() => this.setState({userFriendly:false})}>
                   Create
                 </Button>
               </div>
@@ -313,16 +314,17 @@ class CreateOption extends Component {
         <motion.div variants={itemMain} initial="hidden" animate="show">
 
       
-        <Card className="m-auto py-2" style= {{width: "40%" ,height: "30%",float:"center"}}>
+        <Card className="m-auto py-2" style= {{width: "40%" ,height: "30%",float:"center" , background:"#282c34"}}>
   
         
         
       
-          <CardHeader style = {{border:"none"}}>
-          <div className="switch" data-isOn={this.state.userFriendly} onClick={ () => this.setState({userFriendly:true})} style ={{float:"right"}}>
+          <CardHeader style = {{border:"none" , background:"#282c34"}}>
+           <Row> 
+          <div className="switch ml-5" data-isOn={this.state.userFriendly} onClick={ () => this.setState({userFriendly:true})} style ={{float:"right"}}>
       <motion.div className="handle" layout transition={spring} />
       
-    </div>
+    </div><h1 class="ml-auto mr-5" style={{color:"white"}}>User friendly</h1></Row>
           </CardHeader>
           <CardBody className="mx-5 ">
             <Form role="form">
@@ -420,7 +422,7 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
             id="customCheck1"
             type="checkbox"
           />
-          <label className="custom-control-label" htmlFor="customCheck1">
+          <label style={{color:"white"}} className="custom-control-label" htmlFor="customCheck1">
             Auto Excercise
           </label>
         </div>
@@ -432,7 +434,7 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
              
              
               <div className="text-center">
-                <Button color="primary" type="button" onClick={() => this.setState({userFriendly:false})}>
+                <Button style={{background:"#6a04c9", color:"white", border:"none"}} type="button" onClick={() => this.setState({userFriendly:false})}>
                   Create
                 </Button>
               </div>
