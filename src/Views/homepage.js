@@ -157,14 +157,14 @@ class Homepage extends Component {
                  <Row>
                  <Col>
                  <h2 style={{color:"white"}}> Frontend by:</h2>
-                 <h3 style={{color:"white"}}>Eren Akyıldız </h3><h3 style={{color:"white"}}>Berke Özer </h3>  </Col>
+                 <h3 style={{color:"white"}}><a href="https://www.linkedin.com/in/eren-aky%C4%B1ld%C4%B1z-b67470205/"> Eren Akyıldız</a> </h3><h3 style={{color:"white"}}> <a href="https://www.linkedin.com/in/eren-aky%C4%B1ld%C4%B1z-b67470205/">Berke Özer</a> </h3>  </Col>
                  <br></br>
                  <Col>
                 <h2 style={{color:"white"}}> Smart contracts by:</h2>
-                <h3 style={{color:"white"}}>Ege Caner </h3> <h3 style={{color:"white"}}>Volkan Erdemli </h3></Col>
+                <h3 style={{color:"white"}}><a href="https://www.linkedin.com/in/eren-aky%C4%B1ld%C4%B1z-b67470205/">Ege Caner</a> </h3> <h3 style={{color:"white"}}><a href="https://www.linkedin.com/in/eren-aky%C4%B1ld%C4%B1z-b67470205/">Volkan Erdemli</a> </h3></Col>
                  </Row>
                 <br></br>
-                <h2 style={{color:"white"}}> Developed for chainlink hackathon 2022</h2>
+                <h2 style={{color:"white"}}> Developed for <a href="https://chain.link/hackathon">chainlink hackathon 2022</a></h2>
                 
               </CardBody>
             </Card>

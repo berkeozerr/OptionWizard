@@ -179,7 +179,7 @@ class Sidebar extends React.Component {
                 </div><Row className={"d-flex justify-content-center"} ><motion.svg width={50} height={60}>
                   <motion.path strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData}>
+                      fill="#fff"d={prop.iconData}>
   
                   </motion.path>
                   </motion.svg ></Row></Col>
@@ -187,9 +187,9 @@ class Sidebar extends React.Component {
                 <motion.svg variants = {textMotion}
                   initial="rest"
                   whileHover="hover" width={100} height ={100}  style={{position:"absolute"}}> 
-                <motion.path initial={{x:28,y:37}}stroke="#fff" d={prop.iconData2}></motion.path > 
-                <motion.path initial={{x:18,y:36}} stroke="#fff" d={prop.iconData3}></motion.path>
-                <motion.path initial={{x:5,y:15}}stroke="#fff" d={prop.iconData4}></motion.path></motion.svg>
+                <motion.path initial={{x:28,y:37}}fill="#fff" d={prop.iconData2}></motion.path > 
+                <motion.path initial={{x:18,y:36}} fill="#fff" d={prop.iconData3}></motion.path>
+                <motion.path initial={{x:5,y:15}}fill="#fff" d={prop.iconData4}></motion.path></motion.svg>
                 
               </NavLink>
             </NavItem>
@@ -209,22 +209,22 @@ class Sidebar extends React.Component {
                   whileHover="hover" width={100} height={100} style={{position:"absolute"}}>
                   <motion.path initial={{x:25,y:35}}strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData}>
+                      fill="#fff"d={prop.iconData}>
   
                   </motion.path>
                   <motion.path initial={{x:25,y:35}} strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData3}>
+                      fill="#fff"d={prop.iconData3}>
   
                   </motion.path>
                   <motion.path initial={{x:25,y:35}} strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData4}>
+                      fill="#fff"d={prop.iconData4}>
   
                   </motion.path>
                   <motion.path initial={{x:25,y:35}} strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData5}>
+                      fill="#fff"d={prop.iconData5}>
   
                   </motion.path>
                   </motion.svg >
@@ -249,17 +249,17 @@ class Sidebar extends React.Component {
                   whileHover="hover" width={100} height={100} style={{position:"absolute"}}>
                   <motion.path initial={{x:25,y:35}}strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData}>
+                      fill="#fff"d={prop.iconData}>
   
                   </motion.path>
                   <motion.path initial={{x:25,y:35}} strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData2}>
+                      fill="#fff"d={prop.iconData2}>
   
                   </motion.path>
                   <motion.path initial={{x:25,y:35}} strokeWidth={1}
                   
-                      stroke="#fff"d={prop.iconData3}>
+                      fill="#fff"d={prop.iconData3}>
   
                   </motion.path>
                  
@@ -269,10 +269,10 @@ class Sidebar extends React.Component {
                   <motion.svg variants = {textMotion3}
                   initial="rest"
                   whileHover="hover" width={100} height ={100}  style={{position:"absolute"}}> 
-                <motion.path  initial={{x:24,y:32}} stroke="#fff" d={prop.iconData4}></motion.path > 
-                <motion.path initial={{x:24,y:32}} stroke="#fff" d={prop.iconData5}></motion.path>
-                <motion.path initial={{x:24,y:32}} stroke="#fff" d={prop.iconData6}></motion.path>
-                <motion.path initial={{x:24,y:32}} stroke="#fff" d={prop.iconData7}></motion.path></motion.svg>
+                <motion.path  initial={{x:24,y:32}} fill="#fff" d={prop.iconData4}></motion.path > 
+                <motion.path initial={{x:24,y:32}} fill="#fff" d={prop.iconData5}></motion.path>
+                <motion.path initial={{x:24,y:32}} fill="#fff" d={prop.iconData6}></motion.path>
+                <motion.path initial={{x:24,y:32}} fill="#fff" d={prop.iconData7}></motion.path></motion.svg>
                 
               </NavLink>
             </NavItem>
