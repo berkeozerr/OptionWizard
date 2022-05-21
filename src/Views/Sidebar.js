@@ -7,7 +7,7 @@ import pic from "../assets/img/wizard_hat.svg";
 import { ethers } from "ethers";
 import { ReactSession }  from 'react-client-session';
 import {motion} from "framer-motion";
-
+import Homepage from "./Homepage";
 
 // reactstrap components
 import {
@@ -324,6 +324,7 @@ class Sidebar extends React.Component {
       navbarBrandProps = {
         to: logo.innerLink,
         tag: Link,
+        
       };
     } else if (logo && logo.outterLink) {
       navbarBrandProps = {
