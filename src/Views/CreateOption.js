@@ -147,7 +147,7 @@ class CreateOption extends Component {
             <Row>
           <div className="switch ml-5" data-isOn={this.state.userFriendly} onClick={ () => this.setState({userFriendly:false})} style ={{float:"right"}}>
       <motion.div className="handle" layout transition={spring} />
-    </div><h1 class="ml-auto mr-5" style={{color:"white"}}>Proffessional</h1></Row>
+    </div><h1 class="ml-auto mr-5" style={{color:"white"}}>Professional</h1></Row>
           
           </CardHeader>
           <CardBody style={{background:"#282c34"}} className="px-lg-5 ">
