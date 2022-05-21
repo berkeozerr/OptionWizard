@@ -25,6 +25,7 @@ import { motion } from "framer-motion"
 import { Link, NavLink, withRouter } from "react-router-dom";
 import {useState,useEffect} from "react";
 import Loader from "./Loader";
+import { allTokenOptions } from "./AllPossibleTokens";
 const typeOptions = [
   { value: 'chocolate', label: 'Day' },
   { value: 'strawberry', label: 'Week' },
@@ -85,11 +86,17 @@ class CreateOption extends Component {
   
 
   render() {
-    const options = [
-      { value: "England", label: "BTC", icon: '../assets/img/brand/argon-react.png' },
-      { value: "Germany", label: "ETH", icon: '../assets/img/brand/argon-react.png' }
+    var options = [
     ];
-
+    const keys = Object.keys(allTokenOptions);
+    const values = Object.values(allTokenOptions);
+    let i = 0;
+    while (i < 59){
+      var obj ={ value: keys[i], label: keys[i], icon: values[i] }
+      options.push(obj);
+      i++;
+    }
+    console.log(keys + values);
     var setLoading = (x) => {
       this.setState({loading: x})
     }
@@ -97,7 +104,7 @@ class CreateOption extends Component {
     const IconOption = props => (
       <Option {...props}>
         <img
-          src={require("../assets/img/brand/argon-react.png").default}
+          src={props.data.icon}
           style={{ width: 18 }}
           alt={props.data.label}
         />
@@ -107,7 +114,7 @@ class CreateOption extends Component {
     const IconValue = props => (
       <div>
         <img
-          src={require("../assets/img/brand/argon-react.png").default}
+          src={props.data.icon}
           style={{ width: 18 }}
           alt={props.data.label}
         />
@@ -154,7 +161,7 @@ class CreateOption extends Component {
             <Form role="form">
              
               <Row className="mb-3">
-              <Col sm={8}><FormGroup className="mb-3">
+              <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -167,7 +174,7 @@ class CreateOption extends Component {
                   />
                 </InputGroup>
               </FormGroup></Col>
-              <Col sm={2}><FormGroup className="mb-3">
+              <Col sm={3}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -180,7 +187,7 @@ class CreateOption extends Component {
                   />
                 </InputGroup>
               </FormGroup></Col>
-              <Col sm={2}><FormGroup className="mb-3">
+              <Col sm={3}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -195,7 +202,7 @@ class CreateOption extends Component {
               </FormGroup></Col>
               </Row>
               <Row className="mb-3">
-              <Col sm={8}><FormGroup className="mb-3">
+              <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -208,7 +215,7 @@ class CreateOption extends Component {
                   />
                 </InputGroup>
               </FormGroup></Col>
-              <Col sm={2}><FormGroup className="mb-3">
+              <Col sm={3}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -221,7 +228,7 @@ class CreateOption extends Component {
                   />
                 </InputGroup>
               </FormGroup></Col>
-              <Col sm={2}><FormGroup className="mb-3">
+              <Col sm={3}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -237,7 +244,7 @@ class CreateOption extends Component {
               </Row>
 
               <Row className="mb-3">
-              <Col sm={8}><FormGroup className="mb-3">
+              <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -250,7 +257,7 @@ class CreateOption extends Component {
                   />
                 </InputGroup>
               </FormGroup></Col>
-              <Col sm={2}><FormGroup className="mb-3">
+              <Col sm={3}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -263,7 +270,7 @@ class CreateOption extends Component {
                   />
                 </InputGroup>
               </FormGroup></Col>
-              <Col sm={2}><FormGroup className="mb-3">
+              <Col sm={3}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>
@@ -279,20 +286,37 @@ class CreateOption extends Component {
               
               </Row>
               <Row>
-              <Col sm={4}><FormGroup >
-                  <div style={{width:"20vh"}}>
+              <Col sm={3}><FormGroup >
+                  <div style={{width:"13vh"}}>
 
                  
                   <Select options={typeOptions}className = "align-right"  defaultValue={{ label: "Day", value: 0 }} />
                   </div>
               </FormGroup></Col>
-              <Col sm={4}><FormGroup >
-                  <div style={{width:"20vh"}}>
+              <Col sm={3}><FormGroup >
+                  <div style={{width:"13vh"}}>
 
                  
                   <Select className = "align-right" options={numOptions} defaultValue={{ label: "1", value: 1 }} />
                   </div>
               </FormGroup></Col>
+              <Col  sm={{
+        offset: 1,
+        size: 3
+      }}><FormGroup>
+              <div className="custom-control custom-checkbox ml-9 my-auto">
+          <input
+            className="custom-control-input float-right"
+            id="customCheck1"
+            type="checkbox"
+          />
+          <label style={{color:"white"}} className="custom-control-label" htmlFor="customCheck1">
+            Auto Excercise
+          </label>
+        </div>
+
+              </FormGroup>
+              </Col>
               </Row>
               
              
@@ -326,15 +350,15 @@ class CreateOption extends Component {
       
     </div><h1 class="ml-auto mr-5" style={{color:"white"}}>User friendly</h1></Row>
           </CardHeader>
-          <CardBody className="mx-5 ">
+          <CardBody className="px-lg-5 ">
             <Form role="form">
              
               <Row className="mb-3">
               <Col sm={6}><FormGroup className="mb-3">
 
                  
-<Select options={options} 
-components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} className = "align-right"  defaultValue={options[0]} />
+<Select options={options} placeholder={<div>Type to search</div>}
+components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} className = "align-right" />
               </FormGroup></Col>
               <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
@@ -355,8 +379,8 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
               <Col sm={6}><FormGroup className="mb-3">
 
                  
-<Select options={options} 
-components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} className = "align-right"  defaultValue={options[0]} />
+<Select options={options} placeholder={<div>Type to search</div>}
+components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} className = "align-right" />
               </FormGroup></Col>
               <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">

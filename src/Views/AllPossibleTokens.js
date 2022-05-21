@@ -1,5 +1,3 @@
-
-
 import INCH from "../assets/img/tokenIcons/1INCH.svg";
 import AAVE from "../assets/img/tokenIcons/AAVE.svg";
 import ADA from "../assets/img/tokenIcons/ADA.svg";
@@ -15,8 +13,8 @@ import BAT from "../assets/img/tokenIcons/BAT.svg";
 import BCH from "../assets/img/tokenIcons/BCH.svg";
 import BNB from "../assets/img/tokenIcons/BNB.svg";
 import BNT from "../assets/img/tokenIcons/BNT.svg";
-import BOND from "../assets/img/tokenIcons/BUSD.svg";
-import BTC from "../assets/img/tokenIcons/BUSD.svg";
+import BOND from "../assets/img/tokenIcons/BOND.svg";
+import BTC from "../assets/img/tokenIcons/BTC.svg";
 import BUSD from "../assets/img/tokenIcons/BUSD.svg";
 import CAD from "../assets/img/tokenIcons/CAD.svg";
 import CHF from "../assets/img/tokenIcons/CHF.svg";
