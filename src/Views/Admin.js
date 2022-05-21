@@ -63,7 +63,7 @@ class Admin extends React.Component {
             imgAlt: "...",
           }}
         />
-        <div  style={{width: "100%" ,height: "120vh" }}>
+        <div  style={{width: "100%" ,height: "100vh"}}>
         <Gradient
         style={{height:"100%", zIndex: -20}}
     gradients={ gradients } // required
