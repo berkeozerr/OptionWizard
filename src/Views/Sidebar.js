@@ -332,7 +332,7 @@ class Sidebar extends React.Component {
       };
     }
     return (
-      <div style={{ backgroundColor: "#25274c" }}>
+      <div style={{ backgroundColor: "#3c0173" }}>
 
     
       <Navbar
