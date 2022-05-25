@@ -1,7 +1,29 @@
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import React, { Component } from "react";
 import { Badge,Jumbotron,Card, CardTitle,Row,Col,Label,CardImg,CardBody} from "reactstrap";
+import Loader from "./Loader";
+import { MotionConfig } from "framer-motion";
+import { motion } from "framer-motion";
 
+const itemMain = {
+  hidden: { opacity: 0, y: 200 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      ease: [0.6, 0.01, -0.05, 0.95],
+      duration: 1.6,
+    },
+    exit: {
+    opacity: 0,
+    y: -200,
+    transition: {
+      ease: "easeInOut",
+      duration: 0.8,
+    },
+  },
+  },
+};
 class ListOptions extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +33,7 @@ class ListOptions extends Component {
       successModal: false,
       week_id: 1,
       fixture: [],
+      loading: new Boolean(true)
     };
   }
   
@@ -33,10 +56,21 @@ class ListOptions extends Component {
   }
 
   render() {
+    var setLoading = (x) => {
+      this.setState({loading: x})
+    }
+    if(this.state.loading == true){
+      return (
+        <Loader setLoading={setLoading} />
+      )
+    }
+    else{
+      
     this.addOption(50);
     console.log(this.state.players);
     return (
       <>
+      <motion.div variants={itemMain} initial="hidden" animate="show">
       <Card style= {{background:"transparent",width: "100%"}}>
      <Card className = 'ml-8 mr-8 mb-8 mt-4 pb-4'>
       <BootstrapTable
@@ -89,9 +123,11 @@ class ListOptions extends Component {
       </BootstrapTable>
       </Card>
       </Card>
+      </motion.div>
       </>
      
     );
   }
+}
 }
 export default ListOptions;

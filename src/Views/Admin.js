@@ -1,13 +1,20 @@
 import React from "react";
+
+import { Gradient } from 'react-gradient';
 import { Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
-
+import {useState,useEffect} from "react"
 import Sidebar from "./Sidebar";
 import background from "../assets/img/space-bg.jpeg"
 import routes from "../Routes.js";
+import { zIndex } from "material-ui/styles";
 
+const gradients = [
+  ['#00b5ff', '#b800ff'],
+  ['#8300ff', '#e34a39'],
+];
 class Admin extends React.Component {
   componentDidUpdate(e) {
     document.documentElement.scrollTop = 0;
@@ -46,6 +53,7 @@ class Admin extends React.Component {
   render() {
     return (
       <>
+      
         <Sidebar
           {...this.props}
           routes={routes}
@@ -55,8 +63,15 @@ class Admin extends React.Component {
             imgAlt: "...",
           }}
         />
-        <div  style={{backgroundImage: `url(${background})`,width: "100%" ,height: "120vh" }}>
-          <Switch>{this.getRoutes(routes)}</Switch>
+        <div  style={{width: "100%" ,height: "100vh"}}>
+        <Gradient
+        style={{height:"100%", zIndex: -20}}
+    gradients={ gradients } // required
+    property="background"
+    duration={ 3000 }
+    angle="45deg"
+><Switch>{this.getRoutes(routes)}</Switch></Gradient>
+          
         
         </div>
       </>

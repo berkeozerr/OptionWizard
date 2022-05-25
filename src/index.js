@@ -7,13 +7,13 @@ import "./assets/plugins/nucleo/css/nucleo.css";
 import "./assets/plugins/@fortawesome/fontawesome-free/css/all.min.css";
 import "./assets/scss/argon-dashboard-react.scss";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import Admin from "./Views/Admin";
+
 
 ReactDOM.render(
+  
   <BrowserRouter>
     <Switch>
-      <Route path="/admin" render={(props) => <Admin {...props} />} />
-      <Redirect from="/" to="/admin/createoption" />
+      <App/>
     </Switch>
   </BrowserRouter>,
 
