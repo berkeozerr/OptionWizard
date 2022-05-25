@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ReactSession }  from 'react-client-session';
 
 import {
   Col,
@@ -21,11 +22,14 @@ import {
 } from "reactstrap";
 import Select,{ components } from 'react-select'
 import pic from '../assets/img/brand/argon-react.png'
+import opWizAbi from "../assets/abis/OpWizChainlinkCompatible.json"
 import { motion } from "framer-motion"
 import { Link, NavLink, withRouter } from "react-router-dom";
 import {useState,useEffect} from "react";
 import Loader from "./Loader";
 import { allTokenOptions } from "./AllPossibleTokens";
+import { ethers } from "ethers";
+import { userAddress } from "./globals";
 const typeOptions = [
   { value: 'chocolate', label: 'Day' },
   { value: 'strawberry', label: 'Week' },
@@ -71,7 +75,14 @@ class CreateOption extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {userFriendly: new Boolean(),loading: new Boolean(true)};
+    this.state = {userFriendly: new Boolean(),loading: new Boolean(true), colleteral: new String(""), 
+      counterAsset:  new String(""), 
+      premiumAsset:  new String(""), 
+      colleteralAmount: new String(""),
+      counterAmount: new String(""),
+      premiumAmount: new String(""),
+      offerEnd: new String(""),
+      optionExpiry: new String("")};
 
   }
   handleSubmit = (e) => {
@@ -84,8 +95,70 @@ class CreateOption extends Component {
       
   };
   
-
+  
   render() {
+
+    //handlers:
+    const colleteralSetter = (e) => {
+      this.setState({colleteral:e.value});
+    };
+    const colleteralSetterForProffessional = (e) => {
+      this.setState({colleteral:e.value});
+    };
+    const colleteralAmountSetter = (e) => {
+      this.setState({colleteralAmount:e.value});
+    };
+    const premiumAssetSetter = (e) => {
+      this.setState({premiumAsset:e.value});
+    };
+    const premiumAssetSetterForProffessional = (e) => {
+      this.setState({premiumAsset:e.value});
+    };
+    const premiumAmountSetter = (e) => {
+      this.setState({premiumAmount:e.value});
+    };
+    const counterAssetSetter = (e) => {
+      this.setState({counterAsset:e.value});
+    };
+    const counterAssetSetterForProffessional = (e) => {
+      this.setState({counterAsset:e.value});
+    };
+    const counterAmountSetter = (e) => {
+      this.setState({counterAmount:e.value});
+    };
+    const offerEndSetter = (e) => {
+      
+      this.setState({offerEnd: e.value }); //maybe day month etc..
+    };
+    
+    const optionExpirySetter = (e) => {
+      this.setState({optionExpiry: e.value});
+    };
+    async function offer() {
+        
+
+        const { initiator }= ReactSession.get("address") ;
+        const WAIT_CONFIRMATION = 6;
+        const colleteralToken = new ethers.Contract(this.state.colleteral, opWizAbi , initiator) ; 
+        const opWizChainlink  = new ethers.Contract("OpWizChainlinkCompatible");
+        const approveTx = await colleteralToken.connect(initiator).approve(opWizChainlink.address, this.state.colleteralAmount);
+        await approveTx.wait(WAIT_CONFIRMATION);
+        
+        const offerTx = await opWizChainlink.connect(initiator).offerOption(
+            this.state.colleteral,
+            this.state.counterAsset, 
+            this.state.premiumAsset, 
+            this.state.colleteralAmount, 
+            this.state.counterAmount, 
+            this.state.premiumAmount, 
+            this.state.optionExpiry, 
+            this.state.offerEnd
+        );
+    
+        const offerTxReceipt = await offerTx.wait(WAIT_CONFIRMATION);
+        console.log(offerTxReceipt);
+      
+    }
     var options = [
     ];
     const keys = Object.keys(allTokenOptions);
@@ -121,6 +194,8 @@ class CreateOption extends Component {
         {props.data.label}
         </div>
     );
+
+
   let dataFile = require('../assets/mainnetAddresses.json');
   let pairData = dataFile.ethereumAddresses.networks[1].proxies;
   const pairs = []
@@ -171,6 +246,7 @@ class CreateOption extends Component {
                   <Input
                     placeholder="Collateral Asset"
                     type="text"
+                    onChange={colleteralSetterForProffessional}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -184,6 +260,7 @@ class CreateOption extends Component {
                   <Input
                     placeholder="Amount"
                     type="text"
+                    onChange={colleteralAmountSetter}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -212,6 +289,7 @@ class CreateOption extends Component {
                   <Input
                     placeholder="Counter Asset"
                     type="text"
+                    onChange={counterAssetSetterForProffessional}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -225,6 +303,7 @@ class CreateOption extends Component {
                   <Input
                     placeholder="Amount"
                     type="text"
+                    onChange={counterAmountSetter}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -254,6 +333,7 @@ class CreateOption extends Component {
                   <Input
                     placeholder="Premium Asset"
                     type="text"
+                    onChange={premiumAssetSetterForProffessional}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -267,6 +347,7 @@ class CreateOption extends Component {
                   <Input
                     placeholder="Amount"
                     type="text"
+                    onChange={premiumAmountSetter}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -286,6 +367,9 @@ class CreateOption extends Component {
               
               </Row>
               <Row>
+              <Col sm={3}>
+              Offer ends in:
+              </Col>
               <Col sm={3}><FormGroup >
                   <div style={{width:"13vh"}}>
 
@@ -300,11 +384,9 @@ class CreateOption extends Component {
                   <Select className = "align-right" options={numOptions} defaultValue={{ label: "1", value: 1 }} />
                   </div>
               </FormGroup></Col>
-              <Col  sm={{
-        offset: 1,
-        size: 3
-      }}><FormGroup>
-              <div className="custom-control custom-checkbox ml-9 my-auto">
+              <Col  sm={3
+      }><FormGroup>
+              <div className="custom-control custom-checkbox my-auto">
           <input
             className="custom-control-input float-right"
             id="customCheck1"
@@ -317,12 +399,33 @@ class CreateOption extends Component {
 
               </FormGroup>
               </Col>
+              
+              </Row>
+              <Row>
+              <Col sm={3}>
+              Option expires in:
+                </Col>
+              <Col sm={3}><FormGroup >
+                  <div style={{width:"13vh"}}>
+
+                 
+                  <Select options={typeOptions}className = "align-right"  defaultValue={{ label: "Day", value: 0 }} />
+                  </div>
+              </FormGroup></Col>
+              <Col sm={3}><FormGroup >
+                  <div style={{width:"13vh"}}>
+
+                 
+                  <Select className = "align-right" options={numOptions} defaultValue={{ label: "1", value: 1 }} />
+                  </div>
+              </FormGroup></Col>
+              
               </Row>
               
              
              
               <div className="text-center">
-                <Button style={{background:"#6a04c9", color:"white", border:"none"}} type="button" onClick={() => this.setState({userFriendly:false})}>
+                <Button style={{background:"#6a04c9", color:"white", border:"none"}} type="button" onClick={() => offer()}>
                   Create
                 </Button>
               </div>
@@ -358,7 +461,7 @@ class CreateOption extends Component {
 
                  
 <Select options={options} placeholder={<div>Type to search</div>}
-components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} className = "align-right" />
+components={{ Option: IconOption,SingleValue:IconValue }} onChange={colleteralSetter} styles={customStyles} className = "align-right" />
               </FormGroup></Col>
               <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
@@ -370,6 +473,7 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
                   <Input
                     placeholder="Amount"
                     type="text"
+                    onChange={colleteralAmountSetter}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -380,7 +484,7 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
 
                  
 <Select options={options} placeholder={<div>Type to search</div>}
-components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} className = "align-right" />
+components={{ Option: IconOption,SingleValue:IconValue }} onChange={counterAssetSetter} styles={customStyles} className = "align-right" />
               </FormGroup></Col>
               <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
@@ -392,6 +496,7 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
                   <Input
                     placeholder="Amount"
                     type="text"
+                    onChange={counterAmountSetter}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -403,7 +508,7 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
 
                  
 <Select options={options} placeholder={<div>Type to search</div>}
-components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} className = "align-right"   />
+components={{ Option: IconOption,SingleValue:IconValue }} onChange={premiumAssetSetter} styles={customStyles} className = "align-right"   />
               </FormGroup></Col>
               <Col sm={6}><FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
@@ -415,6 +520,8 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
                   <Input
                     placeholder="Amount"
                     type="text"
+                    
+                    onChange={premiumAmountSetter}
                   />
                 </InputGroup>
               </FormGroup></Col>
@@ -422,6 +529,9 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
               
               </Row>
               <Row>
+                <Col sm={3}>
+                  Offer ends in:
+                </Col>
               <Col sm={3}><FormGroup >
                   <div style={{width:"13vh"}}>
 
@@ -436,16 +546,15 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
                   <Select className = "align-right" options={numOptions} defaultValue={{ label: "1", value: 1 }} />
                   </div>
               </FormGroup></Col>
-              <Col  sm={{
-        offset: 1,
-        size: 3
-      }}><FormGroup>
-              <div className="custom-control custom-checkbox ml-9 my-auto">
+              
+              <Col  sm={3}><FormGroup>
+              <div className="custom-control custom-checkbox my-auto">
           <input
             className="custom-control-input float-right"
             id="customCheck1"
             type="checkbox"
           />
+          
           <label style={{color:"white"}} className="custom-control-label" htmlFor="customCheck1">
             Auto Excercise
           </label>
@@ -454,7 +563,27 @@ components={{ Option: IconOption,SingleValue:IconValue }} styles={customStyles} 
               </FormGroup>
               </Col>
               </Row>
+              <Row>
+              <Col sm={3}>
+              Option expires in:
+                </Col>
+              <Col sm={3}><FormGroup >
+                  <div style={{width:"13vh"}}>
+
+                 
+                  <Select options={typeOptions}className = "align-right"  defaultValue={{ label: "Day", value: 0 }} />
+                  </div>
+              </FormGroup></Col>
+              <Col sm={3}><FormGroup >
+                  <div style={{width:"13vh"}}>
+
+                 
+                  <Select className = "align-right" options={numOptions} defaultValue={{ label: "1", value: 1 }} />
+                  </div>
+              </FormGroup></Col>
               
+              
+              </Row>
              
              
               <div className="text-center">
