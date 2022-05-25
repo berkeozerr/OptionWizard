@@ -7,7 +7,7 @@ import pic from "../assets/img/wizard_hat.svg";
 import { ethers } from "ethers";
 import { ReactSession }  from 'react-client-session';
 import {motion} from "framer-motion";
-import Homepage from "./Homepage";
+import Homepage from "./homepage";
 
 // reactstrap components
 import {

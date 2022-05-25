@@ -1,7 +1,7 @@
 import CreateOption from "./Views/CreateOption";
 import ListOptions  from "./Views/ListOptions";
 import MyOptions from "./Views/MyOptions";
-import Homepage from "./Views/Homepage";
+import Homepage from "./Views/homepage";
 var routes = [
   
 
