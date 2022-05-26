@@ -6,6 +6,7 @@ import bitcoin from "../assets/img/bitcoin.png";
 import ethereum from "../assets/img/ethereum.png";
 import tether from "../assets/img/tether.png";
 import { allTokenOptions } from "./AllPossibleTokens";
+import {MydModalWithGrid} from "./OptionDetail"
 import {
   Col,
   Row,
@@ -138,68 +139,7 @@ const textMotion = {
       );
   }
 
-  const MydModalWithGrid = (props) =>{
-    return (
-        <Modal size="lg" style={{border:"none",background:"transparent",borderRadius:"10px",paddingTop:"10rem"}} {...props} aria-labelledby="contained-modal-title-vcenter">
-        <ModalHeader style={{ background:"#282c34", border:"none",borderRadiusTop:"10px"}} closeButton>
-            <Row style={{paddingLeft:"2rem"}}><h1 style={{color:"white"}}> Option Details </h1>
-        <img style={{paddingLeft:"2rem"}}color="white" src={require("../assets/img/tarot.svg").default} ></img></Row>
-        </ModalHeader>
-        <ModalBody className="show-grid" style={{background:"#282c34", border:"none"}}>
-          <Container>
-            <Row>
-               
-              <Col xs={12} md={8}>
-                <h3 style={{color:"white"}}> Colleteral Asset: {props.assetname}</h3>
-                <h3 style={{color:"white"}}> Colleteral Amount: {props.assetamount} </h3>
-                
-                
-              </Col>
-              <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Purchased at</h5>
-                <h5 style={{color:"wheat"}}> {props.date} </h5>
-              </Col>
-            </Row>
-            <br></br>
   
-            <Row>
-            <Col xs={12} md={8}>
-                <h3 style={{color:"white"}}> Counter Asset: {props.counterassetname} </h3>
-                <h3 style={{color:"white"}}> Counter Amount: {props.counterassetamount} </h3>
-                
-                
-              </Col>
-              <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Option will be excercised at</h5>
-                <h5 style={{color:"wheat"}}> {props.excersizedate} </h5>
-              </Col>
-            </Row>
-
-            <br></br>
-  
-            <Row>
-            <Col xs={12} md={8}>
-                <h3 style={{color:"white"}}> Premium Asset: {props.premiumassetname}</h3>
-                <h3 style={{color:"white"}}> Premium Amount: {props.premiumassetamount}</h3>
-                
-                
-              </Col>
-              <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Current PNL</h5>
-                <h5 style={{color:"wheat"}}> {props.profitloss}</h5>
-              </Col>
-              
-            </Row>
-          </Container>
-        </ModalBody>
-        <ModalFooter style={{background:"#282c34", border:"none"}}>
-          <Button onClick={()=>{
-              props.toggle()
-          }} style={{background:"#6a04c9", border:"none",color:"white"}}>Close</Button>
-        </ModalFooter>
-      </Modal>
-    );
-    }
 const typeOptions = [
   { value: 'chocolate', label: 'Day' },
   { value: 'strawberry', label: 'Week' },
@@ -245,7 +185,6 @@ class MyOptions extends Component {
   
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {userFriendly: new Boolean(),loading: new Boolean(true), modalShow: new Boolean(false), 
         assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
         premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
@@ -253,17 +192,6 @@ class MyOptions extends Component {
     };
 
   }
-  handleSubmit = (e) => {
-    
-    this.props.history.push("/admin/searchplayer");
-        /*this.setState({
-          error: err.response.data.Message,
-        });*/
-        //this.togglewarningModal();
-      
-  };
-  
-
   render() {
     
     
@@ -399,7 +327,12 @@ class MyOptions extends Component {
           </Scrollbars>
           </CardBody>
         </Card>
-        
+        if(bundan o zaman şundan){
+          <button></button>
+        }
+        else{
+          <button></button>
+        }
         <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={!this.state.modalShow} toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
         </motion.div>
         
