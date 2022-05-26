@@ -128,7 +128,7 @@ const Loader = ({ setLoading }) => {
       ease: [0.6, 0.01, -0.05, 0.95],
       duration: 2,
     },
-    }} className="mytext" >OptWiz</motion.div>
+    }} className="mytext" >OpWiz</motion.div>
         </motion.div>
         
   );

@@ -5,7 +5,7 @@ import Loader from "./Loader";
 import { MotionConfig } from "framer-motion";
 import { motion } from "framer-motion";
 import axios from "axios";
-import {MydModalWithGrid} from "./OptionDetail"
+import {MydModalWithGridForList} from "./OptionDetail"
 import "../assets/css/listOptions.css";
 
 const itemMain = {
@@ -37,13 +37,14 @@ class ListOptions extends Component {
       loading: new Boolean(true),
       assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
         premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
-        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0")
+        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0"), initiator: new String("None"), participant: new String("None"),
+        offerEnd: new String("Null"), optionExpiration: new String("Null"), isListed : new Boolean(false), id: new String("0")
     };
     this.closeCollapse = this.closeCollapse.bind(this);
   }
   toogleDetailModal= (row) => {
     this.getOptionDetail(row)
-    
+     
     
   }
 
@@ -143,6 +144,11 @@ class ListOptions extends Component {
           counterAssetAmount: row.amountOfCA,
           premiumAssetName: row.premiumAssetName,
           PremiumAssetAmount: row.premiumAmount,
+          offerEnd: response.data.data.optionDetails[0].offerEnd,
+          optionExpiration: response.data.data.optionDetails[0].optionExpiry,
+          isListed: response.data.data.optionDetails[0].isListed,
+          id: response.data.data.optionDetails[0].id,
+          priceFeedAddress: response.data.data.optionDetails[0].priceFeedAddress,
           modalShow: true
         });
       })
@@ -177,7 +183,10 @@ class ListOptions extends Component {
     return (
       <>
       <motion.div variants={itemMain} initial="hidden" animate="show" className = "pt-4">
-      <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.PremiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} toggle={() => this.setState({modalShow: false})}></MydModalWithGrid>
+      <MydModalWithGridForList assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} 
+      counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.PremiumAssetAmount} premiumassetname={this.state.premiumAssetName} 
+      date={this.state.date} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} initiator={this.state.initiator} participant= {this.state.participant} 
+      optionExpiration={this.state.optionExpiration} offerEnd={this.state.offerEnd} isListed = {this.state.isListed} id={this.state.id} priceFeedAddress= {this.state.priceFeedAddress} toggle={() => this.setState({modalShow: false})}></MydModalWithGridForList>
       
      <Card className = 'ml-8 mr-8 mb-8  pb-4' style={{background: "#282c34" , color:"white"}}>
       <BootstrapTable

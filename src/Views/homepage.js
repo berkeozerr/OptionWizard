@@ -173,7 +173,7 @@ class Homepage extends Component {
                 
               <CardBody className="mx-5 ">
              
-              <h1 style={{color:"wheat"}}> What is OptWiz ? </h1>
+              <h1 style={{color:"wheat"}}> What is OpWiz ? </h1>
               
               <p style={{color:"white", width:"60%"}}>OpWiz is a very flexible american options trading platform where traders can sell/buy options for any combination of ERC20, ERC721, ERC1155 assets, choose their desired asset as option premium and those options can change hands in our secondary-market for options.
               </p>
