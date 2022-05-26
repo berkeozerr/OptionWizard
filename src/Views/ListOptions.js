@@ -4,7 +4,8 @@ import { Badge,Jumbotron,Card, CardTitle,Row,Col,Label,CardImg,CardBody} from "r
 import Loader from "./Loader";
 import { MotionConfig } from "framer-motion";
 import { motion } from "framer-motion";
-
+import axios from "axios";
+import {MydModalWithGrid} from "./OptionDetail"
 const itemMain = {
   hidden: { opacity: 0, y: 200 },
   show: {
@@ -28,34 +29,135 @@ class ListOptions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      players: [],
+      options: [],
       isLoading: false,
-      successModal: false,
-      week_id: 1,
-      fixture: [],
-      loading: new Boolean(true)
+      modalShow: false,
+      loading: new Boolean(true),
+      assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
+        premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
+        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0")
     };
+    this.closeCollapse = this.closeCollapse.bind(this);
   }
-  
-  
-  addOption(quantity) {
-    const startId = 0;
-    for (let i = 1; i < quantity; i++) {
-      const id = startId + i;
-      this.state.players.push({
-        id: id,
-        
-        colleteral: "BTC",
-        amountOfColleteral: 2100 + i,
-        counterAsset: "ETH",
-        amountOfCA: 2100 + i,
-        premiumAsset: "BTC",
-        premiumAmount: 2100 + i
-      });
-    }
+  toogleDetailModal= (row) => {
+    this.getOptionDetail(row.id)
+    this.setState({
+      modalShow: true,
+    });
+    
   }
 
+  closeCollapse = () => {
+    this.setState({
+      modalShow: false,
+    });
+  };
+   
+  getOptions()
+  {
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchOptions",
+        "query": `{
+          options
+          {
+            id
+            initiator
+            participant
+            colleteral
+            counterAsset
+            premiumAsset
+            amountOfColleteral
+            amountOfCA
+            premiumAmount
+            colleteralAssetName
+            counterAssetName
+            premiumAssetName
+          }
+         
+        }`,
+        "variables": {}
+    };
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          options: response.data.data.options,
+        });
+      });
+     // errors if any
+
+
+
+  }
+
+  getOptionDetail(optionId)
+  {
+    console.log(optionId)
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchOption",
+        "query": `query GetOptionDetail($optionId: ID!) {
+          optionDetails(where: {id:$optionId})
+          {
+            id
+            listAsset
+            priceFeedAddress
+            poolAddress
+            offerEnd
+            optionExpiry
+            listAmount
+            isListed
+            exercised
+          }
+         
+        }`,
+        "variables": {optionId:optionId}
+
+    };
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+       /* this.setState({
+          assetName: response.data.data.options,
+          assetAmount:
+          counterAssetName:
+          counterAssetAmount: 
+          premiumAssetName: 
+          PremiumAssetAmount: 
+        });*/
+      })
+      .catch((err => {console.log(err)}));
+     // errors if any
+
+
+
+  }
+  
+  componentDidMount() {
+    this.getOptions();
+  }
+  
   render() {
+    
+    
+    var options = {
+      onRowClick: this.toogleDetailModal
+     }
     var setLoading = (x) => {
       this.setState({loading: x})
     }
@@ -65,12 +167,11 @@ class ListOptions extends Component {
       )
     }
     else{
-      
-    this.addOption(50);
-    console.log(this.state.players);
+   // this.addOption(50);
     return (
       <>
       <motion.div variants={itemMain} initial="hidden" animate="show">
+      <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} toggle={() => this.setState({modalShow: false})}></MydModalWithGrid>
       <Card style= {{background:"transparent",width: "100%"}}>
      <Card className = 'ml-8 mr-8 mb-8 mt-4 pb-4'>
       <BootstrapTable
@@ -79,44 +180,43 @@ class ListOptions extends Component {
       hover
         ref="table"
         bordered={false}
-        data={this.state.players}
+        data={this.state.options}
         pagination
-        
         trStyle={{textAlign:"center" }}
+        options={options}
       >
         <TableHeaderColumn
-          dataField="colleteral"
-          width="10%"
+          dataField="colleteralAssetName"
           dataAlign="center"
           isKey={true}
+          width="16%"
         >
           <h2 style={{ color: "#5e72e4" }}>Colleteral Asset</h2>
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField = "amountOfColleteral"
           dataAlign="center"
-          width="20%"
+          width="16%"
         >
           <h2 style={{ color: "#5e72e4" }}>Colleteral Amount</h2>
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="counterAsset" width="15%" dataAlign="center">
+        <TableHeaderColumn dataField="counterAssetName"  dataAlign="center" width="16%">
           <h2 style={{ color: "#5e72e4" }}>Counter Asset</h2>
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="amountOfCA" width="10%" dataAlign="center">
+        <TableHeaderColumn dataField="amountOfCA"  dataAlign="center" width="16%">
           {" "}
           <h2 style={{ color: "#5e72e4" }}> Counter Amount</h2>
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="premiumAsset" width="10%" dataAlign="center">
-          {" "}
+        <TableHeaderColumn dataField="premiumAssetName"  dataAlign="center" width="16%">
+           
           <h2 style={{ color: "#5e72e4" }}> Premium Asset</h2>
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="premiumAmount"
-          width="10%"
+          width="16%"
           dataAlign="center"
           style={{ color: "#5e72e4" }}
         >
-          {" "}
           <h2 style={{ color: "#5e72e4" }}> Premium Amount</h2>
         </TableHeaderColumn>
        
