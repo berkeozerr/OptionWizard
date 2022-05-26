@@ -327,7 +327,12 @@ class MyOptions extends Component {
           </Scrollbars>
           </CardBody>
         </Card>
-        
+        if(bundan o zaman şundan){
+          <button></button>
+        }
+        else{
+          <button></button>
+        }
         <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={!this.state.modalShow} toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
         </motion.div>
         

@@ -6,6 +6,8 @@ import { MotionConfig } from "framer-motion";
 import { motion } from "framer-motion";
 import axios from "axios";
 import {MydModalWithGrid} from "./OptionDetail"
+import "../assets/css/listOptions.css";
+
 const itemMain = {
   hidden: { opacity: 0, y: 200 },
   show: {
@@ -40,10 +42,8 @@ class ListOptions extends Component {
     this.closeCollapse = this.closeCollapse.bind(this);
   }
   toogleDetailModal= (row) => {
-    this.getOptionDetail(row.id)
-    this.setState({
-      modalShow: true,
-    });
+    this.getOptionDetail(row)
+    
     
   }
 
@@ -90,6 +90,7 @@ class ListOptions extends Component {
         console.log(response.data);
         this.setState({
           options: response.data.data.options,
+          
         });
       });
      // errors if any
@@ -98,8 +99,9 @@ class ListOptions extends Component {
 
   }
 
-  getOptionDetail(optionId)
+  getOptionDetail(row)
   {
+    let optionId = row.id
     console.log(optionId)
     const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
     const headers = {
@@ -132,14 +134,17 @@ class ListOptions extends Component {
       // Once we get a response and store data, let's change the loading state
       .then((response) => {
         console.log(response.data);
-       /* this.setState({
-          assetName: response.data.data.options,
-          assetAmount:
-          counterAssetName:
-          counterAssetAmount: 
-          premiumAssetName: 
-          PremiumAssetAmount: 
-        });*/
+        console.log(row);
+
+        this.setState({
+          assetName: row.colleteralAssetName,
+          assetAmount: row.amountOfColleteral,
+          counterAssetName: row.counterAssetName,
+          counterAssetAmount: row.amountOfCA,
+          premiumAssetName: row.premiumAssetName,
+          PremiumAssetAmount: row.premiumAmount,
+          modalShow: true
+        });
       })
       .catch((err => {console.log(err)}));
      // errors if any
@@ -156,7 +161,8 @@ class ListOptions extends Component {
     
     
     var options = {
-      onRowClick: this.toogleDetailModal
+      onRowClick: this.toogleDetailModal,
+      alwaysShowAllBtns: true,
      }
     var setLoading = (x) => {
       this.setState({loading: x})
@@ -170,10 +176,10 @@ class ListOptions extends Component {
    // this.addOption(50);
     return (
       <>
-      <motion.div variants={itemMain} initial="hidden" animate="show">
-      <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} toggle={() => this.setState({modalShow: false})}></MydModalWithGrid>
-      <Card style= {{background:"transparent",width: "100%"}}>
-     <Card className = 'ml-8 mr-8 mb-8 mt-4 pb-4'>
+      <motion.div variants={itemMain} initial="hidden" animate="show" className = "pt-4">
+      <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.PremiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} toggle={() => this.setState({modalShow: false})}></MydModalWithGrid>
+      
+     <Card className = 'ml-8 mr-8 mb-8  pb-4' style={{background: "#282c34" , color:"white"}}>
       <BootstrapTable
       
       search
@@ -184,6 +190,7 @@ class ListOptions extends Component {
         pagination
         trStyle={{textAlign:"center" }}
         options={options}
+        scrollTop
       >
         <TableHeaderColumn
           dataField="colleteralAssetName"
@@ -221,7 +228,6 @@ class ListOptions extends Component {
         </TableHeaderColumn>
        
       </BootstrapTable>
-      </Card>
       </Card>
       </motion.div>
       </>
