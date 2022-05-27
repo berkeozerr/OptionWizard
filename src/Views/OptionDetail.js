@@ -216,7 +216,85 @@ export const MydModalWithGrid = (props) =>{
                     </Row>
     <Button onClick={()=>{
         handleOpWizSimpleList([ethers.BigNumber.from(props.id),props.details[0].listAsset,props.details[0].listAmount])
-      }}>List Option</Button></Col>
+      }}>List Option</Button>
+      <br/><br/><br/>
+       <Row>
+         
+    
+    <Col sm={3}>
+                      <FormGroup className="mb-3">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-money-coins" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="Strike price"
+                            type="text"
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    <Col sm={4}>
+                      <FormGroup className="mb-3">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-align-left-2" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="Flash excercise"
+                            type="text"
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    <Col sm={3}>
+                      <FormGroup className="mb-3">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-align-left-2" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="Fee"
+                            type="text"
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    </Row>
+                    <Button onClick={()=>{
+        handleOpWizSimpleList([ethers.BigNumber.from(props.id),props.details[0].listAsset,props.details[0].listAmount])
+      }}>Check data</Button>
+      <br/><br/><br/><br/>
+      <Row>
+         
+    
+         <Col sm={3}>
+                           <FormGroup className="mb-3">
+                             <InputGroup className="input-group-alternative">
+                               <InputGroupAddon addonType="prepend">
+                                 <InputGroupText>
+                                   <i className="ni ni-money-coins" />
+                                 </InputGroupText>
+                               </InputGroupAddon>
+                               <Input
+                                 placeholder="Address"
+                                 type="text"
+                               />
+                             </InputGroup>
+                           </FormGroup>
+                         </Col>
+                         
+                         </Row>
+      <Button onClick={()=>{
+        handleOpWizSimpleList([ethers.BigNumber.from(props.id),props.details[0].listAsset,props.details[0].listAmount])
+      }}>Set price feed Address</Button>
+      </Col>
     }
     else if((!props.details[0].exercised)&& (props.details[0].optionExpiry > Math.round((new Date()).getTime() / 1000)) && (props.details[0].isListed)){
       otherButtonParticipant = <Button onClick={()=>{
@@ -273,7 +351,22 @@ export const MydModalWithGrid = (props) =>{
                     </Col>
                     </Row>
       <Button onClick={()=>{
-        handleOpWizSimpleExercise([ethers.BigNumber.from(props.id),props.counterAssetAddress,props.counterassetamount])
+        if(props.proffessional){
+          if(props.premiumAssetType == "0"){
+            handleOpWizExerciseWithERC20([ethers.BigNumber.from(props.id),props.counterAssetAddress,props.counterassetamount])
+          }
+          else if(props.premiumAssetType == "1"){
+            handleOpWizExerciseWithERC721([ethers.BigNumber.from(props.id),props.counterAssetAddress,props.counterassetamount])
+          }
+          else{
+            handleOpWizExerciseWithERC1155(props.indexOfCounterAsset,props.counterAssetAddress,props.counterassetamount,ethers.BigNumber.from(props.id))
+          }
+
+        }
+        else{
+          handleOpWizSimpleExercise([ethers.BigNumber.from(props.id),props.counterAssetAddress,props.counterassetamount])
+        }
+        
       }}>Excercise</Button></Col>
     }
     

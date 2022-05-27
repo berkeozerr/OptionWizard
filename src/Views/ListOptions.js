@@ -53,6 +53,11 @@ class ListOptions extends Component {
       isListed : new Boolean(false), 
       id: new String("0"),
       userFriendly: new Boolean(true),
+      colleteralType: new String("null"),
+      counterAssetType:new String("null"),
+      listAssetType:new String("null"),
+      premiumAssetType: new String("null")
+
     };
     this.closeCollapse = this.closeCollapse.bind(this);
   }
@@ -298,6 +303,11 @@ class ListOptions extends Component {
           listAssetAmount: response.data.data.optionDetails[0].listAmount,
           participant: Xparticipant,
           initiator: Xinitiator,
+          colleteralType:response.data.data.optionDetails[0].colleteralType,
+          counterAssetType:response.data.data.optionDetails[0].counterAssetType,
+          listAssetType:response.data.data.optionDetails[0].listAssetType,
+          premiumAssetType:response.data.data.optionDetails[0].premiumAssetType,
+
           modalShow: true
         });
       })
@@ -345,7 +355,7 @@ class ListOptions extends Component {
       date={this.state.date} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} initiator={this.state.initiator} participant= {this.state.participant} 
       optionExpiration={this.state.optionExpiration} offerEnd={this.state.offerEnd} isListed = {this.state.isListed} id={this.state.id}
        priceFeedAddress= {this.state.priceFeedAddress} 
-       premiumAssetAddress= {this.state.premiumAssetAddress} listAssetAddress = {this.state.listAssetAddress}  listAssetAmount = {this.state.listAssetAmount}
+       premiumAssetAddress= {this.state.premiumAssetAddress} listAssetAddress = {this.state.listAssetAddress}  listAssetAmount = {this.state.listAssetAmount} proffessional={false}
        
        toggle={() => this.setState({modalShow: false})}></MydModalWithGridForList>
       
@@ -428,8 +438,8 @@ class ListOptions extends Component {
       date={this.state.date} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} initiator={this.state.initiator} participant= {this.state.participant} 
       optionExpiration={this.state.optionExpiration} offerEnd={this.state.offerEnd} isListed = {this.state.isListed} id={this.state.id}
        priceFeedAddress= {this.state.priceFeedAddress} 
-       premiumAssetAddress= {this.state.premiumAssetAddress} listAssetAddress = {this.state.listAssetAddress}  listAssetAmount = {this.state.listAssetAmount}
-       
+       premiumAssetAddress= {this.state.premiumAssetAddress} listAssetAddress = {this.state.listAssetAddress}  listAssetAmount = {this.state.listAssetAmount} proffessional={true}
+       colleteralType = {this.state.colleteralType} premiumAssetType= {this.state.premiumAssetType} counterAssetType = {this.state.counterAssetType} listAssetType= {this.state.listAssetType}
        toggle={() => this.setState({modalShow: false})}></MydModalWithGridForList>
       
      <Card className = 'ml-8 mr-8 mb-8  pb-4' style={{background: "#282c34" , color:"white"}}>
