@@ -7,6 +7,8 @@ import ethereum from "../assets/img/ethereum.png";
 import tether from "../assets/img/tether.png";
 import { allTokenOptions } from "./AllPossibleTokens";
 import {MydModalWithGrid} from "./OptionDetail"
+import axios from "axios"
+import { ethers } from "ethers";
 import {
   Col,
   Row,
@@ -141,22 +143,10 @@ const textMotion = {
 
   
 const typeOptions = [
-  { value: 'chocolate', label: 'Day' },
-  { value: 'strawberry', label: 'Week' },
-  { value: 'vanilla', label: 'Month' }
+  { value: 'participant', label: 'Participant' },
+  { value: 'Initiator', label: 'Initiator' },
 ]
-const numOptions = []
-for(var i = 0;i < 366; i += 1)
-{
-numOptions.push({value:i,label:i})
-}
-const customStyles = {
-  control: base => ({
-    ...base,
-    height: 45,
-    
-  })
-};
+
 
 
 const itemMain = {
@@ -188,10 +178,297 @@ class MyOptions extends Component {
     this.state = {userFriendly: new Boolean(),loading: new Boolean(true), modalShow: new Boolean(false), 
         assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
         premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
-        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0")
+        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0"),initiatorOptions: [],participantOptions: []
     };
 
   }
+  async getMyInitiatorOptions()
+  {
+    
+    const address = ReactSession.get("userAddress") 
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+      "operationName": "fetchInitiatorAddress",
+      "query": `query GetInitiatorAddress($address: Bytes!) {
+        options(where: {initiator:$address})
+          
+          {
+            id
+            initiator
+            participant
+            colleteral
+            counterAsset
+            premiumAsset
+            amountOfColleteral
+            amountOfCA
+            premiumAmount
+            colleteralAssetName
+            counterAssetName
+            premiumAssetName
+          }
+         
+        }`,
+        "variables": {address:address}
+    };
+    
+    console.log(address)
+  
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          initiatorOptions: response.data.data.options,
+          
+        });
+      });
+     // errors if any
+
+
+
+  }
+  async getMyParticipatorOptions()
+  {
+    
+    const address = ReactSession.get("userAddress") 
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+      "operationName": "fetchParticipantOptions",
+      "query": `query GetParticipatorOptions($address: Bytes!) {
+        options(where: {participant:$address})
+          
+          {
+            id
+            initiator
+            participant
+            colleteral
+            counterAsset
+            premiumAsset
+            amountOfColleteral
+            amountOfCA
+            premiumAmount
+            colleteralAssetName
+            counterAssetName
+            premiumAssetName
+          }
+         
+        }`,
+        "variables": {address:address}
+    };
+  }
+  async getMyParticipatorFlexibleOptions()
+  {
+    
+    const address = ReactSession.get("userAddress") 
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwizflexible";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+      "operationName": "fetchParticipantOptions",
+      "query": `query GetParticipatorFlexibleOptions($address: Bytes!) {
+        options(where: {participant:$address})
+          
+          {
+            id
+            initiator 
+            participant
+            colleteral 
+            counterAsset
+            premiumAsset
+            indexOfColleteral
+            indexOfCounter
+            indexOfPremium
+            amountOfColleteral
+            amountOfCA
+            premiumAmount
+          }
+         
+        }`,
+        "variables": {address:address}
+    };
+  
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          participantOptions: response.data.data.options,
+          
+        });
+      });
+     // errors if any
+
+
+
+  }
+  async getMyInitiatorFlexibleOptions()
+  {
+    
+    const address = ReactSession.get("userAddress") 
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwizflexible";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+      "operationName": "fetchParticipantOptions",
+      "query": `query GetInitiatorFlexibleOptions($address: Bytes!) {
+        options(where: {initiator:$address})
+          
+          {
+            id
+            initiator 
+            participant
+            colleteral 
+            counterAsset
+            premiumAsset
+            indexOfColleteral
+            indexOfCounter
+            indexOfPremium
+            amountOfColleteral
+            amountOfCA
+            premiumAmount
+          }
+         
+        }`,
+        "variables": {address:address}
+    };
+  
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          initiatorOptions: response.data.data.options,
+          
+        });
+      });
+     // errors if any
+
+
+
+  }
+  getOptionDetail(optionId)
+  {
+    console.log(optionId)
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchOption",
+        "query": `query GetOptionDetail($optionId: ID!) {
+          optionDetails(where: {id:$optionId})
+          {
+            id
+            listAsset
+            priceFeedAddress
+            poolAddress
+            offerEnd
+            optionExpiry
+            listAmount
+            isListed
+            exercised
+          }
+         
+        }`,
+        "variables": {optionId:optionId}
+
+    };
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+       /* this.setState({
+          assetName: response.data.data.options,
+          assetAmount:
+          counterAssetName:
+          counterAssetAmount: 
+          premiumAssetName: 
+          PremiumAssetAmount: 
+        });*/
+      })
+      .catch((err => {console.log(err)}));
+     // errors if any
+  }
+  getFlexibleOptionDetail(optionId)
+  {
+    console.log(optionId)
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwizflexible";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchOption",
+        "query": `query GetFlexibleOptionDetail($optionId: ID!) {
+          optionDetails(where: {id:$optionId})
+          {
+            id
+            listAsset
+            indexOfListAsset
+            offerEnd
+            optionExpiry
+            listAmount
+            colleteralType
+            counterAssetType
+            listAssetType
+            premiumAssetType
+            isListed
+            exercised
+          }
+         
+        }`,
+        "variables": {optionId:optionId}
+
+    };
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+       /* this.setState({
+          assetName: response.data.data.options,
+          assetAmount:
+          counterAssetName:
+          counterAssetAmount: 
+          premiumAssetName: 
+          PremiumAssetAmount: 
+        });*/
+      })
+      .catch((err => {console.log(err)}));
+     // errors if any
+  }
+  componentDidMount() {
+    if(ReactSession.get("userAddress") != "Not logged in")
+    {
+     // this.getMyInitiatorOptions();
+      //this.getMyParticipatorOptions();
+      this.getMyParticipatorFlexibleOptions();
+      this.getMyInitiatorFlexibleOptions();
+    }
+    
+  }
+
   render() {
     
     
@@ -241,7 +518,6 @@ class MyOptions extends Component {
   pairData.forEach(element => {
     pairs.push({value: element.proxy, label: element.pair })
   });
-  console.log(pairs)
     const spring = {
       type: "spring",
       stiffness: 700,
@@ -262,11 +538,13 @@ class MyOptions extends Component {
         <Card className="mx-auto py-2" style= {{width: "90%" ,float:"center", border:"none" ,background:"#3c0173"}}>
   
         
-        <CardHeader style={{background:"#3c0173" , border:"none" , color:"white"}}><img style={{ width: 50, height: 50 }} alt="..." src={pic} /> {ReactSession.get("userAddress")}</CardHeader>
+        <CardHeader style={{background:"#3c0173" , border:"none" , color:"white"}}>
+          <div><img style={{ width: 50, height: 50 }} alt="..." src={pic} /> {ReactSession.get("userAddress")}</div></CardHeader>
         
           <CardBody className="mx-5 " >
           <Scrollbars style={{ width: "100%", height: "500px" }}>
             <Col>
+            
             <Row className="my-5">
                 <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
                 <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
