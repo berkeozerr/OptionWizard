@@ -6,6 +6,7 @@ import { MotionConfig } from "framer-motion";
 import { motion } from "framer-motion";
 import axios from "axios";
 import {MydModalWithGridForList} from "./OptionDetail"
+import {MydModalWithGrid} from "./OptionDetail"
 import "../assets/css/listOptions.css";
 
 const itemMain = {
@@ -31,7 +32,7 @@ class ListOptions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      options: [],
+      options: [{name:"",listAsset:""}],
       isLoading: false,
       modalShow: false,
       loading: new Boolean(true),
@@ -43,8 +44,12 @@ class ListOptions extends Component {
     this.closeCollapse = this.closeCollapse.bind(this);
   }
   toogleDetailModal= (row) => {
-    this.getOptionDetail(row)
-     
+    console.log(row)
+    this.getOptionDetail(row.id)
+   // this.getFlexibleOptionDetail(row.id)
+    this.setState({
+      modalShow: true,
+    });
     
   }
 
@@ -95,9 +100,46 @@ class ListOptions extends Component {
         });
       });
      // errors if any
-
-
-
+  }
+  getFlexibleOptions()
+  {
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwizflexible";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchFlexibleOptions",
+        "query": `{
+          options
+          {
+            id
+            initiator 
+            participant
+            colleteral 
+            counterAsset
+            premiumAsset
+            indexOfColleteral
+            indexOfCounter
+            indexOfPremium
+            amountOfColleteral
+            amountOfCA
+            premiumAmount
+          }
+         
+        }`,
+        "variables": {}
+    };
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+       /* this.setState({
+          options: response.data.data.options,
+        });*/
+      });
+     // errors if any
   }
 
   getOptionDetail(row)
@@ -120,6 +162,59 @@ class ListOptions extends Component {
             offerEnd
             optionExpiry
             listAmount
+            isListed
+            exercised
+          }
+         
+        }`,
+        "variables": {optionId:optionId}
+
+    };
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+        console.log(row);
+
+        this.setState({
+          assetName: row.colleteralAssetName,
+          assetAmount: row.amountOfColleteral,
+          counterAssetName: row.counterAssetName,
+          counterAssetAmount: row.amountOfCA,
+          premiumAssetName: row.premiumAssetName,
+          PremiumAssetAmount: row.premiumAmount,
+          modalShow: true
+        });
+      })
+      .catch((err => {console.log(err)}));
+     // errors if any
+  }
+
+  getFlexibleOptionDetail(optionId)
+  {
+    console.log(optionId)
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwizflexible";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchFlexibleOptionDetail",
+        "query": `query GetFlexibleOptionDetail($optionId: ID!) {
+          optionDetails(where: {id:$optionId})
+          {
+            id
+            listAsset
+            indexOfListAsset
+            offerEnd
+            optionExpiry
+            listAmount
+            colleteralType
+            counterAssetType
+            listAssetType
+            premiumAssetType
             isListed
             exercised
           }
@@ -175,6 +270,7 @@ class ListOptions extends Component {
   
   componentDidMount() {
     this.getOptions();
+    this.getFlexibleOptions();
   }
   
   render() {
