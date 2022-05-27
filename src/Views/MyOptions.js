@@ -62,6 +62,7 @@ const textMotion = {
   };
 
   const MyOptionsConstructor = (props) =>{
+    
    
       return(
                 <Card className="mx-auto py-2" style= {{width: "30%", height: "200px", background:"#282c34"}}>
@@ -86,7 +87,7 @@ const textMotion = {
                     Current PNL: {props.profit} USD
                 </div>
                 <Button onClick={()=>{
-                    props.setModalStateForParent( props.token1, props.token1Amount,props.token2, props.token2Amount,  props.token3, props.token3Amount, props.startDate, props.expire,props.profit )
+                    props.setModalStateForParent( props.token1, props.token1Amount,props.token2, props.token2Amount,  props.token3, props.token3Amount, props.startDate, props.expire,props.profit, props.participantAddress, props.initiatorAddress, props.id)
                     props.setStateForParent(false)
                 }}
                 style={{background:"#6a04c9", border:"none",fontSize:"16px",color:"white", width:"150px",height:"80px"}}><motion.svg
@@ -178,7 +179,8 @@ class MyOptions extends Component {
     this.state = {userFriendly: new Boolean(),loading: new Boolean(true), modalShow: new Boolean(false), 
         assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
         premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
-        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0"),initiatorOptions: [],participantOptions: []
+        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0"),initiatorOptions: [],participantOptions: [],
+         flexibleInitiatorOptions: [], flexibleParticipantOptions:[], optDetail: {}, id: new String("0")
     };
 
   }
@@ -227,6 +229,7 @@ class MyOptions extends Component {
           initiatorOptions: response.data.data.options,
           
         });
+        
       });
      // errors if any
 
@@ -263,7 +266,23 @@ class MyOptions extends Component {
          
         }`,
         "variables": {address:address}
+        
     };
+    console.log(address)
+  
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          participantOptions: response.data.data.options,
+          
+        });
+      });
+     // errors if any
   }
   async getMyParticipatorFlexibleOptions()
   {
@@ -305,7 +324,7 @@ class MyOptions extends Component {
       .then((response) => {
         console.log(response.data);
         this.setState({
-          participantOptions: response.data.data.options,
+          flexibleParticipantOptions: response.data.data.options,
           
         });
       });
@@ -354,7 +373,7 @@ class MyOptions extends Component {
       .then((response) => {
         console.log(response.data);
         this.setState({
-          initiatorOptions: response.data.data.options,
+          flexibleInitiatorOptions: response.data.data.options,
           
         });
       });
@@ -396,15 +415,11 @@ class MyOptions extends Component {
       .post(endpoint,graphqlQuery, headers)
       // Once we get a response and store data, let's change the loading state
       .then((response) => {
+        console.log("HELLOW OWRLRWORO");
         console.log(response.data);
-       /* this.setState({
-          assetName: response.data.data.options,
-          assetAmount:
-          counterAssetName:
-          counterAssetAmount: 
-          premiumAssetName: 
-          PremiumAssetAmount: 
-        });*/
+        this.setState(
+          {optDetail: response.data.data.optionDetails}
+        )
       })
       .catch((err => {console.log(err)}));
      // errors if any
@@ -461,8 +476,9 @@ class MyOptions extends Component {
   componentDidMount() {
     if(ReactSession.get("userAddress") != "Not logged in")
     {
-     // this.getMyInitiatorOptions();
-      //this.getMyParticipatorOptions();
+      console.log(ReactSession.get("userAddress") );
+      this.getMyInitiatorOptions();
+      this.getMyParticipatorOptions();
       this.getMyParticipatorFlexibleOptions();
       this.getMyInitiatorFlexibleOptions();
     }
@@ -471,9 +487,71 @@ class MyOptions extends Component {
 
   
   render() {
-    
-    
-    var setModalState = (assetNamex, assetAmountx, counterAssetNamex, counterAssetAmountx,premiumAssetNamex, premiumAssetAmountx,datex,excersizeDatex,profitLossx) =>{
+    let iter = 0;
+    var finalObjectInitiatorUserFriendly = []
+    var list_ob = []
+    while(iter < this.state.initiatorOptions.length){
+      
+      list_ob.push(this.state.initiatorOptions[iter])
+      if(iter%3 === 2){
+        finalObjectInitiatorUserFriendly.push(list_ob);
+        list_ob = [];
+      }
+      iter++;
+    }
+    iter = 0;
+    if(list_ob.length !== 0){
+      finalObjectInitiatorUserFriendly.push(list_ob);
+    }
+    list_ob = []
+    var finalObjectInitiatorFlexible = []
+    while(iter < this.state.flexibleInitiatorOptions.length){
+      
+      
+      list_ob.push(this.state.flexibleInitiatorOptions[iter])
+      if(iter%3 === 2){
+        finalObjectInitiatorFlexible.push(list_ob);
+        list_ob = [];
+      }
+      iter++;
+    }
+    iter = 0;
+    var finalObjectParticipantUserFriendly = []
+    if(list_ob.length !== 0){
+      finalObjectInitiatorFlexible.push(list_ob);
+    }
+    list_ob = []
+    while(iter < this.state.participantOptions.length){
+      
+      
+      list_ob.push(this.state.participantOptions[iter])
+      if(iter%3 === 2){
+        finalObjectParticipantUserFriendly.push(list_ob);
+        list_ob = [];
+      }
+      iter++;
+    }
+    iter = 0;
+    var finalObjectParticipantFlexible = []
+    if(list_ob.length !== 0){
+      finalObjectParticipantUserFriendly.push(list_ob);
+    }
+    list_ob = []
+    while(iter < this.state.flexibleParticipantOptions.length){
+      
+      
+      list_ob.push(this.state.flexibleParticipantOptions[iter])
+      if(iter%3 === 2){
+        finalObjectParticipantFlexible.push(list_ob);
+        list_ob = [];
+      }
+      iter++;
+    }
+    if(list_ob.length !== 0){
+      finalObjectParticipantFlexible.push(list_ob);
+    }
+    let initiatorOptColumnised = [this.state.initiatorOptions]
+    var setModalState = (assetNamex, assetAmountx, counterAssetNamex, counterAssetAmountx,premiumAssetNamex, premiumAssetAmountx,datex,excersizeDatex,profitLossx,participantx,initiatorx,idx) =>{
         this.setState({
             assetName: assetNamex,
             assetAmount: assetAmountx,
@@ -483,14 +561,17 @@ class MyOptions extends Component {
             premiumAssetAmount: premiumAssetAmountx,
             date: datex,
             excersizeDate: excersizeDatex,
-            profitLoss: profitLossx
+            profitLoss: profitLossx,
+            participant: participantx,
+            initiator: initiatorx,
+            id:idx
         })
     }
     var ComponentGenerator = (detail) => {
       let iter = 0;
       var returnObject = [];
+      console.log(detail.detail);
       while(detail.detail.length > iter){
-        console.log("inside while")
         returnObject[iter] = <><ComponentGeneratorInside detail={detail.detail[iter]}></ComponentGeneratorInside><br/></>
         iter ++;
       }
@@ -500,21 +581,29 @@ class MyOptions extends Component {
       
     }
     var ComponentGeneratorInside = (detail) =>{
+      console.log(detail);
       let iter = 0;
       var returnObject = [];
+     
+
       while (iter < 3){
+       
         if(detail.detail.length <= iter){
           break;
         }
-        returnObject[iter] = <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
+        returnObject[iter] = <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= {detail.detail[iter].colleteralAssetName} 
+        token1Amount = {detail.detail[iter].amountOfColleteral} token2= {detail.detail[iter].counterAssetName}
+         token2Amount = {detail.detail[iter].amountOfCA} token3= {detail.detail[iter].premiumAssetName} token3Amount = {detail.detail[iter].premiumAmount} 
+         participantAddress = {detail.detail[iter].participant} initiatorAddress = {detail.detail[iter].initiator} id= {detail.detail[iter].id}
+         ></MyOptionsConstructor>
         iter ++;
-
       }
       return(<Row>{returnObject}</Row>
       
                 
       )
     }
+    
     var setLoading = (x) => {
       this.setState({loading: x})
     }
@@ -574,20 +663,28 @@ class MyOptions extends Component {
           <CardBody className="mx-5 " >
           <Scrollbars style={{ width: "100%", height: "500px" }}>
             <Col>
-            <ComponentGenerator detail={[["","",""],["",""]]}></ComponentGenerator>
+            <h1 style={{color:"white"}}>User friendly initiator options</h1>
+            <br/>
+            <ComponentGenerator detail={finalObjectInitiatorUserFriendly}></ComponentGenerator>
+            <br/>
+            <h1 style={{color:"white"}}>Proffessional initiator options</h1>
+            <br/>
+            <ComponentGenerator detail={finalObjectInitiatorFlexible}></ComponentGenerator>
+            <br/>
+            <h1 style={{color:"white"}}>User friendly participant options</h1>
+            <br/>
+            <ComponentGenerator detail={finalObjectParticipantUserFriendly}></ComponentGenerator>
+            <br/>
+            <h1 style={{color:"white"}}>Proffessional participant options</h1>
+            <br/>
+            <ComponentGenerator detail={finalObjectParticipantFlexible}></ComponentGenerator>
             </Col>
             
              
           </Scrollbars>
           </CardBody>
         </Card>
-        if(bundan o zaman şundan){
-          <button></button>
-        }
-        else{
-          <button></button>
-        }
-        <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={!this.state.modalShow} toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
+        <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={!this.state.modalShow} participant={this.state.participant} initiator={this.state.initiator} id={this.state.id} toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
         </motion.div>
         
         );

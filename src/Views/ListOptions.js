@@ -46,7 +46,7 @@ class ListOptions extends Component {
   toogleDetailModal= (row) => {
     console.log(row)
     this.getOptionDetail(row.id)
-   // this.getFlexibleOptionDetail(row.id)
+    this.getFlexibleOptionDetail(row.id)
     this.setState({
       modalShow: true,
     });
@@ -230,7 +230,7 @@ class ListOptions extends Component {
       // Once we get a response and store data, let's change the loading state
       .then((response) => {
         console.log(response.data);
-        console.log(row);
+        console.log(optionId);
         let participantId = response.data.data.optionDetails[0].id;
         let iter = 0;
         let Xparticipant = "Null";
@@ -245,12 +245,12 @@ class ListOptions extends Component {
           iter ++;
         }
         this.setState({
-          assetName: row.colleteralAssetName,
-          assetAmount: row.amountOfColleteral,
-          counterAssetName: row.counterAssetName,
-          counterAssetAmount: row.amountOfCA,
-          premiumAssetName: row.premiumAssetName,
-          PremiumAssetAmount: row.premiumAmount,
+          assetName: optionId.colleteralAssetName,
+          assetAmount: optionId.amountOfColleteral,
+          counterAssetName: optionId.counterAssetName,
+          counterAssetAmount: optionId.amountOfCA,
+          premiumAssetName: optionId.premiumAssetName,
+          PremiumAssetAmount: optionId.premiumAmount,
           offerEnd: response.data.data.optionDetails[0].offerEnd,
           optionExpiration: response.data.data.optionDetails[0].optionExpiry,
           isListed: response.data.data.optionDetails[0].isListed,

@@ -23,8 +23,32 @@ import {
   
    } from "reactstrap";
 
+import { ethers } from "ethers";
+import OpwizChainlink from "../assets/abis/OpWizFlashLoan.json";
+import Opwiz from "../assets/abis/OpWiz.json";
+
+
+async function handleOpWizSimpleWithdrawPremium(e){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+  let tx = await opWizChainlink.withdrawPremium(e);
+  await tx.wait(6);
+};
+
+
 
 export const MydModalWithGrid = (props) =>{
+  var buttonParticipantWithdraw;
+  console.log(props.id);
+  if(props.participant != ethers.constants.AddressZero){
+    buttonParticipantWithdraw = <Button onClick={()=>{
+      handleOpWizSimpleWithdrawPremium(ethers.BigNumber.from(props.id))
+    }}>Withdraw premium</Button>
+  }
+  else{
+    buttonParticipantWithdraw = <></>
+  }
     return (
         <Modal size="lg" style={{border:"none",background:"transparent",borderRadius:"10px",paddingTop:"10rem"}} {...props} aria-labelledby="contained-modal-title-vcenter">
         <ModalHeader style={{ background:"#282c34", border:"none",borderRadiusTop:"10px"}} closeButton>
@@ -79,6 +103,7 @@ export const MydModalWithGrid = (props) =>{
           </Container>
         </ModalBody>
         <ModalFooter style={{background:"#282c34", border:"none"}}>
+          {buttonParticipantWithdraw}
           <Button onClick={()=>{
               props.toggle()
           }} style={{background:"#6a04c9", border:"none",color:"white"}}>Close</Button>
