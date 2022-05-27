@@ -33,20 +33,33 @@ class ListOptions extends Component {
     super(props);
     this.state = {
       options: [{name:"",listAsset:""}],
+      flexibleOptions: [],
       isLoading: false,
       modalShow: false,
       loading: new Boolean(true),
-      assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
-        premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
-        date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0"), initiator: new String("None"), participant: new String("None"),
-        offerEnd: new String("Null"), optionExpiration: new String("Null"), isListed : new Boolean(false), id: new String("0")
+      assetName: new String("Null"), 
+      assetAmount: new String("0"), 
+      counterAssetName: new String("Null"), 
+      counterAssetAmount: new String("0"),
+      premiumAssetName: new String("Null"), 
+      PremiumAssetAmount: new String("0"),
+      date: new String("Null"), 
+      excersizeDate: new String("Null"), 
+      profitLoss: new String("0"), 
+      initiator: new String("None"), 
+      participant: new String("None"),
+      offerEnd: new String("Null"), 
+      optionExpiration: new String("Null"), 
+      isListed : new Boolean(false), 
+      id: new String("0"),
+      userFriendly: new Boolean(true),
     };
     this.closeCollapse = this.closeCollapse.bind(this);
   }
   toogleDetailModal= (row) => {
     console.log(row)
-    this.getOptionDetail(row.id)
-    this.getFlexibleOptionDetail(row.id)
+    this.getOptionDetail(row)
+    this.getFlexibleOptionDetail(row)
     this.setState({
       modalShow: true,
     });
@@ -135,16 +148,17 @@ class ListOptions extends Component {
       // Once we get a response and store data, let's change the loading state
       .then((response) => {
         console.log(response.data);
-       /* this.setState({
-          options: response.data.data.options,
-        });*/
+        console.log("HELLOWORLD")
+        this.setState({
+          flexibleOptions: response.data.data.options,
+        });
       });
      // errors if any
   }
 
   getOptionDetail(row)
   {
-    let optionId = row.id
+    let optionId = row
     console.log(optionId)
     const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
     const headers = {
@@ -162,59 +176,6 @@ class ListOptions extends Component {
             offerEnd
             optionExpiry
             listAmount
-            isListed
-            exercised
-          }
-         
-        }`,
-        "variables": {optionId:optionId}
-
-    };
-    
-    axios
-      // This is where the data is hosted
-      .post(endpoint,graphqlQuery, headers)
-      // Once we get a response and store data, let's change the loading state
-      .then((response) => {
-        console.log(response.data);
-        console.log(row);
-
-        this.setState({
-          assetName: row.colleteralAssetName,
-          assetAmount: row.amountOfColleteral,
-          counterAssetName: row.counterAssetName,
-          counterAssetAmount: row.amountOfCA,
-          premiumAssetName: row.premiumAssetName,
-          PremiumAssetAmount: row.premiumAmount,
-          modalShow: true
-        });
-      })
-      .catch((err => {console.log(err)}));
-     // errors if any
-  }
-
-  getFlexibleOptionDetail(optionId)
-  {
-    console.log(optionId)
-    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwizflexible";
-    const headers = {
-      "content-type": "application/json",
-    };
-    const graphqlQuery = {
-        "operationName": "fetchFlexibleOptionDetail",
-        "query": `query GetFlexibleOptionDetail($optionId: ID!) {
-          optionDetails(where: {id:$optionId})
-          {
-            id
-            listAsset
-            indexOfListAsset
-            offerEnd
-            optionExpiry
-            listAmount
-            colleteralType
-            counterAssetType
-            listAssetType
-            premiumAssetType
             isListed
             exercised
           }
@@ -255,7 +216,86 @@ class ListOptions extends Component {
           optionExpiration: response.data.data.optionDetails[0].optionExpiry,
           isListed: response.data.data.optionDetails[0].isListed,
           id: response.data.data.optionDetails[0].id,
-          priceFeedAddress: response.data.data.optionDetails[0].priceFeedAddress,
+          priceFeedAddress: optionId.priceFeedAddress,
+          premiumAssetAddress: optionId.premiumAsset,
+          listAssetAddress: response.data.data.optionDetails[0].listAsset,
+          listAssetAmount: response.data.data.optionDetails[0].listAmount,
+          participant: Xparticipant,
+          initiator: Xinitiator,
+          modalShow: true
+        });
+      })
+      .catch((err => {console.log(err)}));
+     // errors if any
+  }
+
+  getFlexibleOptionDetail(optionId)
+  {
+    var myOptId = optionId.id;
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwizflexible";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchFlexibleOptionDetail",
+        "query": `query GetFlexibleOptionDetail($optionId: ID!) {
+          optionDetails(where: {id:$optionId})
+          {
+            id
+            listAsset
+            indexOfListAsset
+            offerEnd
+            optionExpiry
+            listAmount
+            colleteralType
+            counterAssetType
+            listAssetType
+            premiumAssetType
+            isListed
+            exercised
+          }
+         
+        }`,
+        "variables": {optionId:myOptId}
+
+    };
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log(response.data);
+        console.log(optionId);
+        let participantId = response.data.data.optionDetails[0].id;
+        let iter = 0;
+        let Xparticipant = "Null";
+        let Xinitiator = "Null";
+
+        while (iter < this.state.flexibleOptions.length){
+          if(this.state.flexibleOptions[iter].id == participantId){
+            Xparticipant = this.state.flexibleOptions[iter].participant;
+            Xinitiator = this.state.flexibleOptions[iter].initiator;
+
+          }
+          iter ++;
+        }
+
+        this.setState({
+          assetName: optionId.colleteralAssetName,
+          assetAmount: optionId.amountOfColleteral,
+          counterAssetName: optionId.counterAssetName,
+          counterAssetAmount: optionId.amountOfCA,
+          premiumAssetName: optionId.premiumAssetName,
+          PremiumAssetAmount: optionId.premiumAmount,
+          offerEnd: response.data.data.optionDetails[0].offerEnd,
+          optionExpiration: response.data.data.optionDetails[0].optionExpiry,
+          isListed: response.data.data.optionDetails[0].isListed,
+          id: response.data.data.optionDetails[0].id,
+          priceFeedAddress: optionId.priceFeedAddress,
+          premiumAssetAddress: optionId.premiumAsset,
+          listAssetAddress: response.data.data.optionDetails[0].listAsset,
+          listAssetAmount: response.data.data.optionDetails[0].listAmount,
           participant: Xparticipant,
           initiator: Xinitiator,
           modalShow: true
@@ -290,15 +330,40 @@ class ListOptions extends Component {
     }
     else{
    // this.addOption(50);
+   const spring = {
+    type: "spring",
+    stiffness: 700,
+    damping: 30,
+  };
+  if(this.state.userFriendly == true){
     return (
       <>
       <motion.div variants={itemMain} initial="hidden" animate="show" className = "pt-4">
+      
       <MydModalWithGridForList assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} 
       counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.PremiumAssetAmount} premiumassetname={this.state.premiumAssetName} 
       date={this.state.date} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} initiator={this.state.initiator} participant= {this.state.participant} 
-      optionExpiration={this.state.optionExpiration} offerEnd={this.state.offerEnd} isListed = {this.state.isListed} id={this.state.id} priceFeedAddress= {this.state.priceFeedAddress} toggle={() => this.setState({modalShow: false})}></MydModalWithGridForList>
+      optionExpiration={this.state.optionExpiration} offerEnd={this.state.offerEnd} isListed = {this.state.isListed} id={this.state.id}
+       priceFeedAddress= {this.state.priceFeedAddress} 
+       premiumAssetAddress= {this.state.premiumAssetAddress} listAssetAddress = {this.state.listAssetAddress}  listAssetAmount = {this.state.listAssetAmount}
+       
+       toggle={() => this.setState({modalShow: false})}></MydModalWithGridForList>
       
      <Card className = 'ml-8 mr-8 mb-8  pb-4' style={{background: "#282c34" , color:"white"}}>
+     <br/>
+     <Row>
+                  <div
+                    className="switch ml-5"
+                    data-isOn={this.state.userFriendly}
+                    onClick={() => this.setState({ userFriendly: false })}
+                    style={{ float: "right" }}
+                  >
+                    <motion.div className="handle" layout transition={spring} />
+                  </div>
+                  <h1 class="mr-auto ml-5" style={{ color: "white" }}>
+                    User friendly
+                  </h1>
+      </Row>
       <BootstrapTable
       
       search
@@ -352,6 +417,91 @@ class ListOptions extends Component {
       </>
      
     );
+  }
+  else{
+    return (
+      <>
+      <motion.div variants={itemMain} initial="hidden" animate="show" className = "pt-4">
+      
+      <MydModalWithGridForList assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} 
+      counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.PremiumAssetAmount} premiumassetname={this.state.premiumAssetName} 
+      date={this.state.date} excersizedate={this.state.excersizeDate}  isOpen={this.state.modalShow} initiator={this.state.initiator} participant= {this.state.participant} 
+      optionExpiration={this.state.optionExpiration} offerEnd={this.state.offerEnd} isListed = {this.state.isListed} id={this.state.id}
+       priceFeedAddress= {this.state.priceFeedAddress} 
+       premiumAssetAddress= {this.state.premiumAssetAddress} listAssetAddress = {this.state.listAssetAddress}  listAssetAmount = {this.state.listAssetAmount}
+       
+       toggle={() => this.setState({modalShow: false})}></MydModalWithGridForList>
+      
+     <Card className = 'ml-8 mr-8 mb-8  pb-4' style={{background: "#282c34" , color:"white"}}>
+       <br/>
+     <Row>
+                  <div
+                    className="switch ml-5"
+                    data-isOn={this.state.userFriendly}
+                    onClick={() => this.setState({ userFriendly: true })}
+                    style={{ float: "right" }}
+                  >
+                    <motion.div className="handle" layout transition={spring} />
+                  </div>
+                  <h1 class="mr-auto ml-5" style={{ color: "white" }}>
+                    Professional
+                  </h1>
+                </Row>
+      <BootstrapTable
+      
+      search
+      hover
+        ref="table"
+        bordered={false}
+        data={this.state.flexibleOptions}
+        pagination
+        trStyle={{textAlign:"center" }}
+        options={options}
+        scrollTop
+      >
+        <TableHeaderColumn
+          dataField="colleteralAssetName"
+          dataAlign="center"
+          isKey={true}
+          width="16%"
+        >
+          <h2 style={{ color: "#5e72e4" }}>Colleteral Asset</h2>
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField = "amountOfColleteral"
+          dataAlign="center"
+          width="16%"
+        >
+          <h2 style={{ color: "#5e72e4" }}>Colleteral Amount</h2>
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="counterAssetName"  dataAlign="center" width="16%">
+          <h2 style={{ color: "#5e72e4" }}>Counter Asset</h2>
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="amountOfCA"  dataAlign="center" width="16%">
+          {" "}
+          <h2 style={{ color: "#5e72e4" }}> Counter Amount</h2>
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="premiumAssetName"  dataAlign="center" width="16%">
+           
+          <h2 style={{ color: "#5e72e4" }}> Premium Asset</h2>
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="premiumAmount"
+          width="16%"
+          dataAlign="center"
+          style={{ color: "#5e72e4" }}
+        >
+          <h2 style={{ color: "#5e72e4" }}> Premium Amount</h2>
+        </TableHeaderColumn>
+       
+      </BootstrapTable>
+      </Card>
+      </motion.div>
+      </>
+     
+    );
+  }
+    
   }
 }
 }

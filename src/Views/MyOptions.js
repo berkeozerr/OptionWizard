@@ -82,11 +82,11 @@ const textMotion = {
                 </Row>
                 <Row>
                 <div class="ml-5 my-2" style={{width:"50%", float:"right",color:"wheat", fontSize:"14px"}}>
-                    Current PNL: {props.profit} USD
+                    
                 </div>
                 <Button onClick={()=>{
                     props.setDetails(props.id)
-                    props.setModalStateForParent( props.token1, props.token1Amount,props.token2, props.token2Amount,  props.token3, props.token3Amount, props.startDate, props.expire,props.profit, props.participantAddress, props.initiatorAddress, props.id)
+                    props.setModalStateForParent( props.token1, props.token1Amount,props.token2, props.token2Amount,  props.token3, props.token3Amount, props.startDate, props.expire,props.profit, props.participantAddress, props.initiatorAddress, props.id, props.colleteralAssetAddress,props.counterAssetAddress,props.premiumAssetAddress,props.listAssetAddress,props.listAssetAmount)
                     props.setStateForParent(false)
                 }}
                 style={{background:"#6a04c9", border:"none",fontSize:"16px",color:"white", width:"150px",height:"80px"}}><motion.svg
@@ -179,7 +179,8 @@ class MyOptions extends Component {
         assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
         premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
         date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0"),initiatorOptions: [],participantOptions: [],
-         flexibleInitiatorOptions: [], flexibleParticipantOptions:[], optDetail: [{}], id: new String("0")
+         flexibleInitiatorOptions: [], flexibleParticipantOptions:[], optDetail: [{}], id: new String("0"),
+          colleteralAssetAddress: new String("Null"), counterAssetAddress: new String("Null"), premiumAssetAddress: new String("Null") , listAssetAddress: new String("Null"), listAssetAmount: new Number(0)
     };
 
   }
@@ -558,7 +559,9 @@ class MyOptions extends Component {
       finalObjectParticipantFlexible.push(list_ob);
     }
     let initiatorOptColumnised = [this.state.initiatorOptions]
-    var setModalState = (assetNamex, assetAmountx, counterAssetNamex, counterAssetAmountx,premiumAssetNamex, premiumAssetAmountx,datex,excersizeDatex,profitLossx,participantx,initiatorx,idx) =>{
+    var setModalState = (assetNamex, assetAmountx, counterAssetNamex,
+       counterAssetAmountx,premiumAssetNamex, premiumAssetAmountx,datex,
+       excersizeDatex,profitLossx,participantx,initiatorx,idx, colleteralAssetAddressx,counterAssetAddressx,premiumAssetAddressx,listAssetAddressx,listAssetAmountx) =>{
         this.setState({
             assetName: assetNamex,
             assetAmount: assetAmountx,
@@ -571,7 +574,13 @@ class MyOptions extends Component {
             profitLoss: profitLossx,
             participant: participantx,
             initiator: initiatorx,
-            id:idx
+            id:idx,
+            colleteralAssetAddress:colleteralAssetAddressx,
+            counterAssetAddress:counterAssetAddressx,
+            premiumAssetAddress:premiumAssetAddressx,
+            listAssetAddress:listAssetAddressx,
+            listAssetAmount:listAssetAmountx,
+
         })
     }
     var getOptionDetail = (optionId)=>
@@ -644,6 +653,9 @@ class MyOptions extends Component {
         token1Amount = {detail.detail[iter].amountOfColleteral} token2= {detail.detail[iter].counterAssetName}
          token2Amount = {detail.detail[iter].amountOfCA} token3= {detail.detail[iter].premiumAssetName} token3Amount = {detail.detail[iter].premiumAmount} 
          participantAddress = {detail.detail[iter].participant} initiatorAddress = {detail.detail[iter].initiator} id= {detail.detail[iter].id}
+          colleteralAssetAddress={detail.detail[iter].colleteral} counterAssetAddress={detail.detail[iter].counterAsset}  
+         premiumAssetAddress={detail.detail[iter].premiumAsset} listAssetAddress={detail.detail[iter].listAssetAddress}  listAssetAmount={detail.detail[iter].listAssetAmount}
+
          ></MyOptionsConstructor>
         iter ++;
       }
@@ -737,7 +749,27 @@ class MyOptions extends Component {
           </Scrollbars>
           </CardBody>
         </Card>
-        <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={!this.state.modalShow} participant={this.state.participant} initiator={this.state.initiator} id={this.state.id} details={this.state.optDetail} toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
+        <MydModalWithGrid assetname= {this.state.assetName} 
+        assetamount= {this.state.assetAmount} 
+        counterassetname = {this.state.counterAssetName}
+         counterassetamount = {this.state.counterAssetAmount} 
+         premiumassetamount= {this.state.premiumAssetAmount}
+          premiumassetname={this.state.premiumAssetName} 
+          date={this.state.date} 
+          profitloss={this.state.profitLoss}
+           excersizedate={this.state.excersizeDate}  
+           isOpen={!this.state.modalShow} 
+           participant={this.state.participant}
+            initiator={this.state.initiator} 
+            id={this.state.id} 
+            details={this.state.optDetail}
+            colleteralAssetAddress={this.state.colleteralAssetAddress} 
+            counterAssetAddress={this.state.counterAssetAddress}  
+            premiumAssetAddress={this.state.premiumAssetAddress} 
+            listAssetAddress={this.state.listAssetAddress}  
+            listAssetAmount={this.state.listAssetAmount}
+            
+            toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
         </motion.div>
         
         );

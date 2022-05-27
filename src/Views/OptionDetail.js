@@ -26,24 +26,103 @@ import {
 import { ethers } from "ethers";
 import OpwizChainlink from "../assets/abis/OpWizFlashLoan.json";
 import Opwiz from "../assets/abis/OpWiz.json";
+import { ReactSession }  from 'react-client-session';
+import ERC20 from "../assets/abis/ERC20.json";
+import ERC721 from "../assets/abis/ERC721.json";
+import ERC1155 from "../assets/abis/ERC1155.json";
 
+
+async function handleOpWizExerciseWithERC20(counterAssetAddress,PremiumAssetAmount,optionId){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const opWiz = new ethers.Contract(Opwiz.address, Opwiz.abi, signer);
+  const erc20 = new ethers.Contract(counterAssetAddress, ERC20.abi, signer);
+  let approveTx =  await erc20.approve(opWiz.address, PremiumAssetAmount);
+  await approveTx.wait(6);
+  let tx = await opWiz.exerciseOption(optionId);
+  await tx.wait(6);
+};
+
+async function handleOpWizExerciseWithERC721(counterAssetAddress,indexOfCounterAsset,optionId){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const erc721 = new ethers.Contract(counterAssetAddress, ERC721.abi, signer);
+  const abiCoder = ethers.utils.defaultAbiCoder;
+  let exerciseOptionParamsInfo = abiCoder.encode(["uint8", "uint"], [4, optionId]);
+  let tx = await erc721["safeTransferFrom(address,address,uint256,bytes)"](
+    signer.address, 
+    Opwiz.address, 
+    indexOfCounterAsset, 
+    exerciseOptionParamsInfo
+  );
+  await tx.wait(6);
+};
+
+async function handleOpWizExerciseWithERC1155(counterAssetAddress,indexOfCounterAsset,counterAssetAmount,optionId){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const erc1155 = new ethers.Contract(counterAssetAddress, ERC1155.abi, signer);
+  const abiCoder = ethers.utils.defaultAbiCoder;
+  let  exerciseOptionParamsInfo = abiCoder.encode(["uint8", "uint"], [4, optionId]);
+  let tx = await erc1155.safeTransferFrom(
+    signer.address, 
+    Opwiz.address, 
+    indexOfCounterAsset, 
+    counterAssetAmount, 
+    exerciseOptionParamsInfo
+  );
+  await tx.wait(6);
+};
 
 async function handleOpWizSimpleWithdrawPremium(e){
   const provider = await new ethers.providers.Web3Provider(window.ethereum)
   const signer = await provider.getSigner()
   const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
-  let tx = await opWizChainlink.withdrawPremium(e);
+  let tx = await opWizChainlink.withdrawPremium(e,{gasLimit:800000,gasPrice:1000000000});
   await tx.wait(6);
 };
 async function handleOpWizSimpleWithdrawCounterAsset(e){
   const provider = await new ethers.providers.Web3Provider(window.ethereum)
   const signer = await provider.getSigner()
   const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
-  let tx = await opWizChainlink.withdrawCA(e);
+  let tx = await opWizChainlink.withdrawCA(e,{gasLimit:800000,gasPrice:1000000000});
   await tx.wait(6);
 };
-
-
+async function handleOpWizSimpleRefundColleteral(e){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+  let tx = await opWizChainlink.refundColleteral(e,{gasLimit:80000,gasPrice:1000000000});
+  await tx.wait(6);
+};
+async function handleOpWizSimpleExercise(e){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+  const erc20 = new ethers.Contract(e[1], ERC20.abi, signer);
+  let approveTx =  await erc20.approve(opWizChainlink.address, e[2]);
+  await approveTx.wait(6);
+  let tx = await opWizChainlink.exerciseOption(e[0],{gasLimit:80000,gasPrice:1000000000});
+  await tx.wait(6);
+};
+async function handleOpWizSimpleList(e){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+  let tx = await opWizChainlink.listOption(
+    e[0], 
+    e[1],
+    e[2],{gasLimit:80000,gasPrice:1000000000}
+  );
+  await tx.wait(6);
+};
+async function handleOpWizSimpleDelist(e){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+  let tx = await opWizChainlink.delistOption(e,{gasLimit:80000,gasPrice:1000000000});
+  await tx.wait(6);
+};
 
 export const MydModalWithGrid = (props) =>{
   console.log("-------------------------------------------");
@@ -60,9 +139,13 @@ export const MydModalWithGrid = (props) =>{
             isListed
             exercised
   */
-  var date = new Date(props.details[0].optionExpiry * 1000);
+ console.log("DATA IASIFNASPOFIA FPASIGPA OSGPAOSG")
+ console.log(props);
+  var date = new Date(parseInt(props.details[0].optionExpiry,10) * 1000);
   var buttonParticipantWithdraw;
-  if(props.participant != ethers.constants.AddressZero){
+  var otherButtonParticipant;
+  if((ReactSession.get("userAddress").toLowerCase() == props.initiator)){
+  if(props.participant != ethers.constants.AddressZero  ){
     buttonParticipantWithdraw = <Button onClick={()=>{
       handleOpWizSimpleWithdrawPremium(ethers.BigNumber.from(props.id))
     }}>Withdraw premium</Button>
@@ -70,10 +153,132 @@ export const MydModalWithGrid = (props) =>{
   else if(props.details[0].exercised ){
     buttonParticipantWithdraw = <Button onClick={()=>{
       handleOpWizSimpleWithdrawCounterAsset(ethers.BigNumber.from(props.id))
-    }}>Withdraw premium</Button>
-  } 
+    }}>Withdraw counter asset</Button>
+  }
+  else if(((props.participant == ethers.constants.AddressZero) && (props.details[0].offerEnd < Math.round((new Date()).getTime() / 1000))) 
+  || ((props.details[0].optionExpiry <  Math.round((new Date()).getTime() / 1000)) && (!props.details[0].exercised)) ){
+    buttonParticipantWithdraw = <Button onClick={()=>{
+      handleOpWizSimpleRefundColleteral(ethers.BigNumber.from(props.id))
+    }}>Refund Colleteral</Button>
+  }
   else{
     buttonParticipantWithdraw = <></>
+  }
+  }
+  else if((ReactSession.get("userAddress").toLowerCase() == props.participant)){
+    if ((!props.details[0].exercised)&& (props.details[0].optionExpiry > Math.round((new Date()).getTime() / 1000)) && (!props.details[0].isListed)){
+      otherButtonParticipant = <Col><Row><Col sm={6}>
+      <FormGroup className="mb-3">
+        <InputGroup className="input-group-alternative">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="ni ni-paper-diploma" />
+            </InputGroupText>
+          </InputGroupAddon>
+          <Input
+            placeholder="List asset"
+            type="text"
+            
+          />
+        </InputGroup>
+      </FormGroup>
+    </Col>
+    <Col sm={3}>
+                      <FormGroup className="mb-3">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-money-coins" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="Amount"
+                            type="text"
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    <Col sm={3}>
+                      <FormGroup className="mb-3">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-align-left-2" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="If NFT, Index"
+                            type="text"
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    </Row>
+    <Button onClick={()=>{
+        handleOpWizSimpleList([ethers.BigNumber.from(props.id),props.details[0].listAsset,props.details[0].listAmount])
+      }}>List Option</Button></Col>
+    }
+    else if((!props.details[0].exercised)&& (props.details[0].optionExpiry > Math.round((new Date()).getTime() / 1000)) && (props.details[0].isListed)){
+      otherButtonParticipant = <Button onClick={()=>{
+        handleOpWizSimpleDelist(ethers.BigNumber.from(props.id))
+      }}>Delist Option</Button>
+    }
+    else if((!props.details[0].exercised)&& (props.details[0].optionExpiry > Math.round((new Date()).getTime() / 1000))){
+      otherButtonParticipant = <Col>
+      <Row><Col sm={6}>
+      <FormGroup className="mb-3">
+        <InputGroup className="input-group-alternative">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="ni ni-paper-diploma" />
+            </InputGroupText>
+          </InputGroupAddon>
+          <Input
+            placeholder="Collateral Asset"
+            type="text"
+            
+          />
+        </InputGroup>
+      </FormGroup>
+    </Col>
+    <Col sm={3}>
+                      <FormGroup className="mb-3">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-money-coins" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="Amount"
+                            type="text"
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    <Col sm={3}>
+                      <FormGroup className="mb-3">
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-align-left-2" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            placeholder="If NFT, Index"
+                            type="text"
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    </Row>
+      <Button onClick={()=>{
+        handleOpWizSimpleExercise([ethers.BigNumber.from(props.id),props.counterAssetAddress,props.counterassetamount])
+      }}>Excercise</Button></Col>
+    }
+    
+    
+    
   }
   
     return (
@@ -93,8 +298,8 @@ export const MydModalWithGrid = (props) =>{
                 
               </Col>
               <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Purchased at</h5>
-                <h5 style={{color:"wheat"}}> {props.date} </h5>
+                <h5 style={{color:"wheat"}}> Option expires at</h5>
+                <h5 style={{color:"wheat"}}> {date.getUTCDay() + "/" + date.getUTCMonth() + "/" + date.getFullYear() + " " +date.getHours() + ":" + date.getMinutes()} </h5>
               </Col>
             </Row>
             <br></br>
@@ -106,10 +311,7 @@ export const MydModalWithGrid = (props) =>{
                 
                 
               </Col>
-              <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Option expires at</h5>
-                <h5 style={{color:"wheat"}}> {date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear() + " " +date.getHours() + ":" + date.getMinutes()} </h5>
-              </Col>
+              
             </Row>
 
             <br></br>
@@ -121,16 +323,11 @@ export const MydModalWithGrid = (props) =>{
                 
                 
               </Col>
-              <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Current PNL</h5>
-                <h5 style={{color:"wheat"}}> {props.profitloss}</h5>
-              </Col>
-              
             </Row>
           </Container>
         </ModalBody>
         <ModalFooter style={{background:"#282c34", border:"none"}}>
-          {buttonParticipantWithdraw}
+          {buttonParticipantWithdraw}{otherButtonParticipant}
           <Button onClick={()=>{
               props.toggle()
           }} style={{background:"#6a04c9", border:"none",color:"white"}}>Close</Button>
@@ -139,14 +336,35 @@ export const MydModalWithGrid = (props) =>{
     );
     }
 
-
+    async function handleOpWizSimpleParticipate(e){
+      const provider = await new ethers.providers.Web3Provider(window.ethereum)
+      const signer = await provider.getSigner()
+      const erc20 = new ethers.Contract(e[1], ERC20.abi, signer);
+      let approveTx = await erc20.approve(OpwizChainlink.address, e[2]);
+      await approveTx.wait(6);
+      const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+      let tx = await opWizChainlink.participateOption(e[0],{gasLimit:80000,gasPrice:1000000000});
+      await tx.wait(6);
+    };
+    async function handleOpWizSimpleBuyOption(e) {
+      const provider = await new ethers.providers.Web3Provider(window.ethereum)
+      const signer = await provider.getSigner()
+      const erc20 = new ethers.Contract(e[1], ERC20.abi, signer);
+      let approveTx = await erc20.approve(OpwizChainlink.address, e[2]);
+      await approveTx.wait(6);
+      const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+      let tx = await opWizChainlink.buyOption(e[0],{gasLimit:80000,gasPrice:1000000000});
+      await tx.wait(6);
+    };
 
 export const MydModalWithGridForList = (props) =>{
     let buyButton;
     let participateButton;
+    console.log(props);
+    console.log("__-*-*-*-*-**0*0980986")
     if(props.isListed){
       buyButton = <Button onClick={()=>{
-        props.toggle()
+        handleOpWizSimpleParticipate( props.id, props.premiumAssetAddress, props.premiumAssetAmount)
     }} style={{background:"#6a04c9", border:"none",color:"white"}}>Buy option</Button>
     }
     else{
@@ -154,7 +372,7 @@ export const MydModalWithGridForList = (props) =>{
     }
     if(props.participant == "0x0000000000000000000000000000000000000000"){
       participateButton = <Button onClick={()=>{
-        props.toggle()
+        handleOpWizSimpleParticipate( props.id, props.premiumAssetAddress, props.premiumAssetAmount)
     }} style={{background:"#6a04c9", border:"none",color:"white"}}>Participate</Button>
     }
     else{
