@@ -62,7 +62,7 @@ const textMotion = {
   };
 
   const MyOptionsConstructor = (props) =>{
-    
+      
    
       return(
                 <Card className="mx-auto py-2" style= {{width: "30%", height: "200px", background:"#282c34"}}>
@@ -78,15 +78,14 @@ const textMotion = {
                 </div></Row>
                 <br></br>
                 <Row>
-                <div class="avatar-group mx-5 my-2" style={{width:"100%", float:"right",color:"white"}}>
-                    Expiration Date: {props.expire}
-                </div>
+                
                 </Row>
                 <Row>
                 <div class="ml-5 my-2" style={{width:"50%", float:"right",color:"wheat", fontSize:"14px"}}>
                     Current PNL: {props.profit} USD
                 </div>
                 <Button onClick={()=>{
+                    props.setDetails(props.id)
                     props.setModalStateForParent( props.token1, props.token1Amount,props.token2, props.token2Amount,  props.token3, props.token3Amount, props.startDate, props.expire,props.profit, props.participantAddress, props.initiatorAddress, props.id)
                     props.setStateForParent(false)
                 }}
@@ -473,6 +472,15 @@ class MyOptions extends Component {
       .catch((err => {console.log(err)}));
      // errors if any
   }
+  toogleDetailModal= (row) => {
+    console.log(row)
+    this.getOptionDetail(row.id)
+    this.getFlexibleOptionDetail(row.id)
+    this.setState({
+      modalShow: true,
+    });
+    
+  }
   componentDidMount() {
     if(ReactSession.get("userAddress") != "Not logged in")
     {
@@ -567,6 +575,49 @@ class MyOptions extends Component {
             id:idx
         })
     }
+    var getOptionDetail = (optionId)=>
+  {
+    console.log(optionId)
+    const endpoint = "https://api.thegraph.com/subgraphs/name/berkeozerr/opwiz";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+        "operationName": "fetchOption",
+        "query": `query GetOptionDetail($optionId: ID!) {
+          optionDetails(where: {id:$optionId})
+          {
+            id
+            listAsset
+            priceFeedAddress
+            poolAddress
+            offerEnd
+            optionExpiry
+            listAmount
+            isListed
+            exercised
+          }
+         
+        }`,
+        "variables": {optionId:optionId}
+
+    };
+    
+    axios
+      // This is where the data is hosted
+      .post(endpoint,graphqlQuery, headers)
+      // Once we get a response and store data, let's change the loading state
+      .then((response) => {
+        console.log("HELLOW OWRLRWORO");
+        console.log(response.data);
+        this.setState(
+          {optDetail: response.data.data.optionDetails}
+        )
+      })
+      .catch((err => {console.log(err)}));
+     // errors if any
+  }
+
     var ComponentGenerator = (detail) => {
       let iter = 0;
       var returnObject = [];
@@ -587,11 +638,11 @@ class MyOptions extends Component {
      
 
       while (iter < 3){
-       
+        
         if(detail.detail.length <= iter){
           break;
         }
-        returnObject[iter] = <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= {detail.detail[iter].colleteralAssetName} 
+        returnObject[iter] = <MyOptionsConstructor setDetails = {getOptionDetail} setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= {detail.detail[iter].colleteralAssetName} 
         token1Amount = {detail.detail[iter].amountOfColleteral} token2= {detail.detail[iter].counterAssetName}
          token2Amount = {detail.detail[iter].amountOfCA} token3= {detail.detail[iter].premiumAssetName} token3Amount = {detail.detail[iter].premiumAmount} 
          participantAddress = {detail.detail[iter].participant} initiatorAddress = {detail.detail[iter].initiator} id= {detail.detail[iter].id}
@@ -608,8 +659,12 @@ class MyOptions extends Component {
       this.setState({loading: x})
     }
     var setModal = (x) => {
+        this.getOptionDetail()
         this.setState({modalShow: x})
     }
+    
+  
+     
     const { Option } = components;
     const IconOption = props => (
       <Option {...props}>
@@ -684,7 +739,7 @@ class MyOptions extends Component {
           </Scrollbars>
           </CardBody>
         </Card>
-        <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={!this.state.modalShow} participant={this.state.participant} initiator={this.state.initiator} id={this.state.id} toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
+        <MydModalWithGrid assetname= {this.state.assetName} assetamount= {this.state.assetAmount} counterassetname = {this.state.counterAssetName} counterassetamount = {this.state.counterAssetAmount} premiumassetamount= {this.state.premiumAssetAmount} premiumassetname={this.state.premiumAssetName} date={this.state.date} profitloss={this.state.profitLoss} excersizedate={this.state.excersizeDate}  isOpen={!this.state.modalShow} participant={this.state.participant} initiator={this.state.initiator} id={this.state.id} details={this.state.optDetail} toggle={() => this.setState({modalShow: true})}></MydModalWithGrid>
         </motion.div>
         
         );

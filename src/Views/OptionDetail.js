@@ -39,16 +39,20 @@ async function handleOpWizSimpleWithdrawPremium(e){
 
 
 export const MydModalWithGrid = (props) =>{
+  console.log("-------------------------------------------");
+  console.log(props.details);
+  console.log("-------------------------------------------");
   var buttonParticipantWithdraw;
-  console.log(props.id);
   if(props.participant != ethers.constants.AddressZero){
     buttonParticipantWithdraw = <Button onClick={()=>{
       handleOpWizSimpleWithdrawPremium(ethers.BigNumber.from(props.id))
     }}>Withdraw premium</Button>
   }
+  
   else{
     buttonParticipantWithdraw = <></>
   }
+  
     return (
         <Modal size="lg" style={{border:"none",background:"transparent",borderRadius:"10px",paddingTop:"10rem"}} {...props} aria-labelledby="contained-modal-title-vcenter">
         <ModalHeader style={{ background:"#282c34", border:"none",borderRadiusTop:"10px"}} closeButton>
@@ -80,8 +84,8 @@ export const MydModalWithGrid = (props) =>{
                 
               </Col>
               <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Option will be excercised at</h5>
-                <h5 style={{color:"wheat"}}> {props.excersizedate} </h5>
+                <h5 style={{color:"wheat"}}> Option TIME DATA FROM GOD DAMN THING</h5>
+                <h5 style={{color:"wheat"}}> {props.details[0].optionExpiry} </h5>
               </Col>
             </Row>
 
