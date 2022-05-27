@@ -136,7 +136,19 @@ class ListOptions extends Component {
       .then((response) => {
         console.log(response.data);
         console.log(row);
+        let participantId = response.data.data.optionDetails[0].id;
+        let iter = 0;
+        let Xparticipant = "Null";
+        let Xinitiator = "Null";
 
+        while (iter < this.state.options.length){
+          if(this.state.options[iter].id == participantId){
+            Xparticipant = this.state.options[iter].participant;
+            Xinitiator = this.state.options[iter].initiator;
+
+          }
+          iter ++;
+        }
         this.setState({
           assetName: row.colleteralAssetName,
           assetAmount: row.amountOfColleteral,
@@ -149,6 +161,8 @@ class ListOptions extends Component {
           isListed: response.data.data.optionDetails[0].isListed,
           id: response.data.data.optionDetails[0].id,
           priceFeedAddress: response.data.data.optionDetails[0].priceFeedAddress,
+          participant: Xparticipant,
+          initiator: Xinitiator,
           modalShow: true
         });
       })

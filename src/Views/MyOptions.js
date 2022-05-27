@@ -192,6 +192,8 @@ class MyOptions extends Component {
     };
 
   }
+
+  
   render() {
     
     
@@ -207,6 +209,35 @@ class MyOptions extends Component {
             excersizeDate: excersizeDatex,
             profitLoss: profitLossx
         })
+    }
+    var ComponentGenerator = (detail) => {
+      let iter = 0;
+      var returnObject = [];
+      while(detail.detail.length > iter){
+        console.log("inside while")
+        returnObject[iter] = <><ComponentGeneratorInside detail={detail.detail[iter]}></ComponentGeneratorInside><br/></>
+        iter ++;
+      }
+
+      return (<>{returnObject}</>
+      )
+      
+    }
+    var ComponentGeneratorInside = (detail) =>{
+      let iter = 0;
+      var returnObject = [];
+      while (iter < 3){
+        if(detail.detail.length <= iter){
+          break;
+        }
+        returnObject[iter] = <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
+        iter ++;
+
+      }
+      return(<Row>{returnObject}</Row>
+      
+                
+      )
     }
     var setLoading = (x) => {
       this.setState({loading: x})
@@ -267,62 +298,9 @@ class MyOptions extends Component {
           <CardBody className="mx-5 " >
           <Scrollbars style={{ width: "100%", height: "500px" }}>
             <Col>
-            <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-             <Row className="my-5">
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "ADX" token1Amount = "123"token2= "BCH" token2Amount = "33" token3= "USDT" token3Amount = "3213"profit= "103" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "MANA" token1Amount = "123" token2= "BTC" token2Amount = "33" token3= "USDC" token3Amount = "3213"profit= "23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                <MyOptionsConstructor setModalStateForParent = {setModalState} setStateForParent = {setModal} token1= "YFI" token1Amount = "123" token2= "MATIC" token2Amount = "33" token3= "LINK" token3Amount = "3213" profit= "-23" expire= "22/may/2022" startDate="22/may/2022"></MyOptionsConstructor>
-                
-             </Row>
-
-             </Col>
+            <ComponentGenerator detail={[["","",""],["",""]]}></ComponentGenerator>
+            </Col>
+            
              
           </Scrollbars>
           </CardBody>
