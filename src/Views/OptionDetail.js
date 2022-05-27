@@ -35,6 +35,13 @@ async function handleOpWizSimpleWithdrawPremium(e){
   let tx = await opWizChainlink.withdrawPremium(e);
   await tx.wait(6);
 };
+async function handleOpWizSimpleWithdrawCounterAsset(e){
+  const provider = await new ethers.providers.Web3Provider(window.ethereum)
+  const signer = await provider.getSigner()
+  const opWizChainlink = new ethers.Contract(OpwizChainlink.address, OpwizChainlink.abi, signer);
+  let tx = await opWizChainlink.withdrawCA(e);
+  await tx.wait(6);
+};
 
 
 
@@ -42,13 +49,29 @@ export const MydModalWithGrid = (props) =>{
   console.log("-------------------------------------------");
   console.log(props.details);
   console.log("-------------------------------------------");
+  /*
+            id
+            listAsset
+            priceFeedAddress
+            poolAddress
+            offerEnd
+            optionExpiry
+            listAmount
+            isListed
+            exercised
+  */
+  var date = new Date(props.details[0].optionExpiry * 1000);
   var buttonParticipantWithdraw;
   if(props.participant != ethers.constants.AddressZero){
     buttonParticipantWithdraw = <Button onClick={()=>{
       handleOpWizSimpleWithdrawPremium(ethers.BigNumber.from(props.id))
     }}>Withdraw premium</Button>
   }
-  
+  else if(props.details[0].exercised ){
+    buttonParticipantWithdraw = <Button onClick={()=>{
+      handleOpWizSimpleWithdrawCounterAsset(ethers.BigNumber.from(props.id))
+    }}>Withdraw premium</Button>
+  } 
   else{
     buttonParticipantWithdraw = <></>
   }
@@ -84,8 +107,8 @@ export const MydModalWithGrid = (props) =>{
                 
               </Col>
               <Col xs={6} md={4}>
-                <h5 style={{color:"wheat"}}> Option TIME DATA FROM GOD DAMN THING</h5>
-                <h5 style={{color:"wheat"}}> {props.details[0].optionExpiry} </h5>
+                <h5 style={{color:"wheat"}}> Option expires at</h5>
+                <h5 style={{color:"wheat"}}> {date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear() + " " +date.getHours() + ":" + date.getMinutes()} </h5>
               </Col>
             </Row>
 

@@ -179,7 +179,7 @@ class MyOptions extends Component {
         assetName: new String("Null"), assetAmount: new String("0"), counterAssetName: new String("Null"), counterAssetAmount: new String("0"),
         premiumAssetName: new String("Null"), PremiumAssetAmount: new String("0"),
         date: new String("Null"), excersizeDate: new String("Null"), profitLoss: new String("0"),initiatorOptions: [],participantOptions: [],
-         flexibleInitiatorOptions: [], flexibleParticipantOptions:[], optDetail: {}, id: new String("0")
+         flexibleInitiatorOptions: [], flexibleParticipantOptions:[], optDetail: [{}], id: new String("0")
     };
 
   }
@@ -414,7 +414,6 @@ class MyOptions extends Component {
       .post(endpoint,graphqlQuery, headers)
       // Once we get a response and store data, let's change the loading state
       .then((response) => {
-        console.log("HELLOW OWRLRWORO");
         console.log(response.data);
         this.setState(
           {optDetail: response.data.data.optionDetails}
@@ -608,7 +607,6 @@ class MyOptions extends Component {
       .post(endpoint,graphqlQuery, headers)
       // Once we get a response and store data, let's change the loading state
       .then((response) => {
-        console.log("HELLOW OWRLRWORO");
         console.log(response.data);
         this.setState(
           {optDetail: response.data.data.optionDetails}
