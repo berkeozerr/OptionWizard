@@ -262,6 +262,8 @@ class CreateOption extends Component {
     const signer = provider.getSigner();
     console.log(signer);
     const WAIT_CONFIRMATION = 6;
+
+    //address does not exist, add that.
     const OpWizChainLinkCompatible = new ethers.Contract(
       opWizchainlinkAbi.address,
       opWizchainlinkAbi.abi,
@@ -286,6 +288,7 @@ class CreateOption extends Component {
       offer_end
     );
 
+    //hacı bunları biri yazmış zaten ???
     console.log(offerTx);
     console.log(this.state.offerEndType);
     const offerTxReceipt = await offerTx.wait(WAIT_CONFIRMATION);
@@ -307,40 +310,40 @@ class CreateOption extends Component {
   render() {
     //handlers:
     const colleteralSetter = (e) => {
-      this.setState({ colleteral: e.value });
+      this.setState({ colleteral: e.SingleValue });
     };
     const colleteralSetterForProffessional = (e) => {
-      this.setState({ colleteral: e.value });
+      this.setState({ colleteral: e.SingleValue });
     };
     const colleteralAmountSetter = (e) => {
-      this.setState({ colleteralAmount: e.value });
+      this.setState({ colleteralAmount: e.SingleValue });
     };
     const premiumAssetSetter = (e) => {
-      this.setState({ premiumAsset: e.value });
+      this.setState({ premiumAsset: e.SingleValue });
     };
     const premiumAssetSetterForProffessional = (e) => {
-      this.setState({ premiumAsset: e.value });
+      this.setState({ premiumAsset: e.SingleValue });
     };
     const premiumAmountSetter = (e) => {
-      this.setState({ premiumAmount: e.value });
+      this.setState({ premiumAmount: e.SingleValue });
     };
     const counterAssetSetter = (e) => {
-      this.setState({ counterAsset: e.value });
+      this.setState({ counterAsset: e.SingleValue });
     };
     const counterAssetSetterForProffessional = (e) => {
-      this.setState({ counterAsset: e.value });
+      this.setState({ counterAsset: e.SingleValue });
     };
     const counterAmountSetter = (e) => {
-      this.setState({ counterAmount: e.value });
+      this.setState({ counterAmount: e.SingleValue });
     };
     const indexofcollateralSetter = (e) => {
-      this.setState({ indexofcollateral: e.value });
+      this.setState({ indexofcollateral: e.SingleValue });
     };
     const indexofcounterSetter = (e) => {
-      this.setState({ indexofcounter: e.value });
+      this.setState({ indexofcounter: e.SingleValue });
     };
     const indexofpremiumSetter = (e) => {
-      this.setState({ indexofpremium: e.value });
+      this.setState({ indexofpremium: e.SingleValue });
     };
 
     var options = [];
@@ -435,7 +438,7 @@ class CreateOption extends Component {
                             placeholder="Collateral Asset"
                             type="text"
                             onChange={(e) =>
-                              colleteralSetterForProffessional(e.target)
+                              colleteralSetterForProffessional(e)
                             }
                           />
                         </InputGroup>
@@ -452,7 +455,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="Amount"
                             type="text"
-                            onChange={(e) => colleteralAmountSetter(e.target)}
+                            onChange={(e) => colleteralAmountSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -468,7 +471,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="If NFT, Index"
                             type="text"
-                            onChange={(e) => indexofcollateralSetter(e.target)}
+                            onChange={(e) => indexofcollateralSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -487,7 +490,7 @@ class CreateOption extends Component {
                             placeholder="Counter Asset"
                             type="text"
                             onChange={(e) =>
-                              counterAssetSetterForProffessional(e.target)
+                              counterAssetSetterForProffessional(e)
                             }
                           />
                         </InputGroup>
@@ -504,7 +507,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="Amount"
                             type="text"
-                            onChange={(e) => counterAmountSetter(e.target)}
+                            onChange={(e) => counterAmountSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -520,7 +523,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="If NFT, Index"
                             type="text"
-                            onChange={(e) => indexofcounterSetter(e.target)}
+                            onChange={(e) => indexofcounterSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -540,7 +543,7 @@ class CreateOption extends Component {
                             placeholder="Premium Asset"
                             type="text"
                             onChange={(e) =>
-                              premiumAssetSetterForProffessional(e.target)
+                              premiumAssetSetterForProffessional(e)
                             }
                           />
                         </InputGroup>
@@ -557,7 +560,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="Amount"
                             type="text"
-                            onChange={(e) => premiumAmountSetter(e.target)}
+                            onChange={(e) => premiumAmountSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -573,7 +576,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="If NFT, Index"
                             type="text"
-                            onChange={(e) => indexofpremiumSetter(e.target)}
+                            onChange={(e) => indexofpremiumSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -718,7 +721,7 @@ class CreateOption extends Component {
                             Option: IconOption,
                             SingleValue: IconValue,
                           }}
-                          onChange={(e) => colleteralSetter(e.target)}
+                          onChange={(e) => colleteralSetter(e)}
                           styles={customStyles}
                           className="align-right"
                         />
@@ -735,7 +738,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="Amount"
                             type="text"
-                            onChange={(e) => colleteralAmountSetter(e.target)}
+                            onChange={(e) => colleteralAmountSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -751,7 +754,7 @@ class CreateOption extends Component {
                             Option: IconOption,
                             SingleValue: IconValue,
                           }}
-                          onChange={(e) => counterAssetSetter(e.target)}
+                          onChange={(e) => counterAssetSetter(e)}
                           styles={customStyles}
                           className="align-right"
                         />
@@ -768,7 +771,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="Amount"
                             type="text"
-                            onChange={(e) => counterAmountSetter(e.target)}
+                            onChange={(e) => counterAmountSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -785,7 +788,7 @@ class CreateOption extends Component {
                             Option: IconOption,
                             SingleValue: IconValue,
                           }}
-                          onChange={(e) => premiumAssetSetter(e.target)}
+                          onChange={(e) => premiumAssetSetter(e)}
                           styles={customStyles}
                           className="align-right"
                         />
@@ -802,7 +805,7 @@ class CreateOption extends Component {
                           <Input
                             placeholder="Amount"
                             type="text"
-                            onChange={(e) => premiumAmountSetter(e.target)}
+                            onChange={(e) => premiumAmountSetter(e)}
                           />
                         </InputGroup>
                       </FormGroup>

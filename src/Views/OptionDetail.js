@@ -432,6 +432,7 @@ export const MydModalWithGrid = (props) =>{
     async function handleOpWizSimpleParticipate(e){
       const provider = await new ethers.providers.Web3Provider(window.ethereum)
       const signer = await provider.getSigner()
+      console.log(e);
       const erc20 = new ethers.Contract(e[1], ERC20.abi, signer);
       let approveTx = await erc20.approve(OpwizChainlink.address, e[2]);
       await approveTx.wait(6);
@@ -457,7 +458,7 @@ export const MydModalWithGridForList = (props) =>{
     console.log("__-*-*-*-*-**0*0980986")
     if(props.isListed){
       buyButton = <Button onClick={()=>{
-        handleOpWizSimpleParticipate( props.id, props.premiumAssetAddress, props.premiumAssetAmount)
+        handleOpWizSimpleParticipate([ props.id, props.premiumAssetAddress, props.premiumassetamount])
     }} style={{background:"#6a04c9", border:"none",color:"white"}}>Buy option</Button>
     }
     else{
@@ -465,7 +466,7 @@ export const MydModalWithGridForList = (props) =>{
     }
     if(props.participant == "0x0000000000000000000000000000000000000000"){
       participateButton = <Button onClick={()=>{
-        handleOpWizSimpleParticipate( props.id, props.premiumAssetAddress, props.premiumAssetAmount)
+        handleOpWizSimpleParticipate( [props.id, props.premiumAssetAddress, props.premiumassetamount])
     }} style={{background:"#6a04c9", border:"none",color:"white"}}>Participate</Button>
     }
     else{
